@@ -73,20 +73,20 @@ export function Header() {
                 </button>
 
                 {/* Dropdown */}
-                <div className="absolute right-0 top-full mt-2 w-48 bg-[#131722] border border-[#2B2B43] rounded-xl shadow-xl overflow-hidden hidden group-hover:block hover:block animation-in fade-in slide-in-from-top-2 duration-200">
-                    <div className="px-4 py-3 border-b border-[#2B2B43]">
-                       <p className="text-sm text-white font-bold truncate">{user.displayName || "Unknown"}</p>
-                       <p className="text-xs text-neutral-500 truncate">{user.email}</p>
+                <div className="absolute right-0 top-full mt-2 w-48 bg-background border border-foreground/10 rounded-xl shadow-xl overflow-hidden hidden group-hover:block hover:block animation-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="px-4 py-3 border-b border-foreground/10">
+                       <p className="text-sm text-foreground font-bold truncate">{user.displayName || "Unknown"}</p>
+                       <p className="text-xs text-foreground/50 truncate">{user.email}</p>
                     </div>
-                    <button className="w-full text-left px-4 py-3 text-sm text-neutral-300 hover:bg-white/5 flex items-center gap-2 transition-colors">
+                    <button className="w-full text-left px-4 py-3 text-sm text-foreground/70 hover:bg-foreground/5 flex items-center gap-2 transition-colors">
                        <User size={14} /> My Page
                     </button>
-                    <button className="w-full text-left px-4 py-3 text-sm text-neutral-300 hover:bg-white/5 flex items-center gap-2 transition-colors">
+                    <button className="w-full text-left px-4 py-3 text-sm text-foreground/70 hover:bg-foreground/5 flex items-center gap-2 transition-colors">
                        <Settings size={14} /> Settings
                     </button>
                     <button 
                       onClick={handleLogout}
-                      className="w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 flex items-center gap-2 transition-colors border-t border-[#2B2B43]"
+                      className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-500/10 flex items-center gap-2 transition-colors border-t border-foreground/10"
                     >
                        <LogOut size={14} /> Sign Out
                     </button>

@@ -49,7 +49,7 @@ function ReasonCard({ reason }: { reason: Reason }) {
   return (
     <div 
       onClick={handleUrlClick}
-      className="group relative overflow-hidden rounded-lg border border-neutral-800 bg-neutral-950/50 p-3 hover:border-neutral-700 transition-colors backdrop-blur-sm cursor-pointer active:scale-[0.99]"
+      className="group relative overflow-hidden rounded-lg border border-foreground/10 bg-foreground/5 p-3 hover:border-foreground/20 transition-colors backdrop-blur-sm cursor-pointer active:scale-[0.99]"
     >
       <div
         className={cn(
@@ -60,18 +60,18 @@ function ReasonCard({ reason }: { reason: Reason }) {
 
       <div className="relative z-10 flex flex-col gap-2 pl-2">
         <div className="flex items-center justify-between">
-          <span className="text-xs text-neutral-500 font-mono">
+          <span className="text-xs text-foreground/40 font-mono">
             {reason.timestamp}
           </span>
           <div className="flex items-center gap-2">
              <button
-               onClick={handleVote}
-               className={cn(
-                 "flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold transition-all border",
-                 hasVoted 
-                   ? "bg-orange-500/20 text-orange-400 border-orange-500/50 shadow-[0_0_10px_-4px_rgba(251,146,60,0.5)]" 
-                   : "bg-neutral-800/50 text-neutral-500 border-transparent hover:bg-neutral-700 hover:text-neutral-300"
-               )}
+                onClick={handleVote}
+                className={cn(
+                  "flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold transition-all border",
+                  hasVoted 
+                    ? "bg-orange-500/20 text-orange-500 border-orange-500/50 shadow-[0_0_10px_-4px_rgba(251,146,60,0.5)]" 
+                    : "bg-foreground/5 text-foreground/40 border-transparent hover:bg-foreground/10 hover:text-foreground/60"
+                )}
              >
                🔥 {votes}
              </button>
@@ -91,17 +91,17 @@ function ReasonCard({ reason }: { reason: Reason }) {
         </div>
         
         <div className="flex items-center justify-between gap-4">
-           <h3 className="font-bold text-neutral-200 text-sm leading-snug group-hover:text-cyan-400 transition-colors line-clamp-2">
+           <h3 className="font-bold text-foreground/90 text-sm leading-snug group-hover:text-cyan-500 transition-colors line-clamp-2">
             {reason.title}
            </h3>
-           <Activity size={14} className="text-neutral-700 opacity-50 group-hover:opacity-100 group-hover:text-cyan-500 transition-all shrink-0" />
+           <Activity size={14} className="text-foreground/20 group-hover:text-cyan-500 transition-all shrink-0" />
         </div>
 
         <div className="flex flex-wrap gap-2 mt-1">
           {reason.tags.map((tag) => (
             <span
               key={tag}
-              className="text-[10px] text-neutral-600 border border-neutral-800/50 rounded px-1.5 py-0.5 uppercase tracking-wider"
+              className="text-[10px] text-foreground/40 border border-foreground/10 rounded px-1.5 py-0.5 uppercase tracking-wider"
             >
               #{tag}
             </span>

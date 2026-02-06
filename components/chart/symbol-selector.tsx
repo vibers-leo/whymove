@@ -17,15 +17,15 @@ export const SymbolSelector = ({ currentSymbol, onSelect, symbols }: SymbolSelec
     <div className="relative z-50">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-1.5 bg-[#1e222d] hover:bg-[#2A2E39] border border-[#2B2B43] rounded text-[#d1d4dc] text-sm font-medium transition-colors"
+        className="flex items-center gap-2 px-3 py-1.5 bg-background hover:bg-foreground/5 border border-foreground/10 rounded text-foreground/70 text-sm font-medium transition-colors"
       >
-        <span className="text-[#089981] font-bold">●</span> {/* Live Indicator */}
+        <span className="text-emerald-500 font-bold">●</span> {/* Live Indicator */}
         {currentSymbol}
-        <ChevronDown className="w-4 h-4 text-[#787b86]" />
+        <ChevronDown className="w-4 h-4 text-foreground/40" />
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 w-48 bg-[#1e222d] border border-[#2B2B43] rounded shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+        <div className="absolute top-full left-0 mt-1 w-48 bg-background border border-foreground/10 rounded shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-100">
           {symbols.map((sym) => (
             <button
               key={sym.id}
@@ -34,12 +34,12 @@ export const SymbolSelector = ({ currentSymbol, onSelect, symbols }: SymbolSelec
                 setIsOpen(false);
               }}
               className={cn(
-                "w-full text-left px-4 py-2 text-sm hover:bg-[#2A2E39] transition-colors flex justify-between items-center",
-                currentSymbol === sym.id ? "text-[#2962FF] bg-[#2962FF]/10 font-bold" : "text-[#d1d4dc]"
+                "w-full text-left px-4 py-2 text-sm hover:bg-foreground/5 transition-colors flex justify-between items-center",
+                currentSymbol === sym.id ? "text-cyan-500 bg-cyan-500/10 font-bold" : "text-foreground/70"
               )}
             >
               <span>{sym.id}</span>
-              {/* <span className="text-xs text-[#787b86]">{sym.name}</span> */}
+              {/* <span className="text-xs text-foreground/40">{sym.name}</span> */}
             </button>
           ))}
         </div>

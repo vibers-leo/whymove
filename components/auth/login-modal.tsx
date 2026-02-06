@@ -25,12 +25,12 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-md bg-[#1e222d] border border-[#2B2B43] rounded-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-md bg-background border border-foreground/10 rounded-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
         
         {/* Header */}
-        <div className="px-6 py-4 border-b border-[#2B2B43] flex justify-between items-center bg-[#131722]">
-          <h3 className="text-lg font-bold text-white">Sign In Required</h3>
-          <button onClick={onClose} className="text-neutral-400 hover:text-white transition-colors">
+        <div className="px-6 py-4 border-b border-foreground/10 flex justify-between items-center bg-foreground/5">
+          <h3 className="text-lg font-bold text-foreground">Sign In Required</h3>
+          <button onClick={onClose} className="text-neutral-400 hover:text-foreground transition-colors">
             <X size={20} />
           </button>
         </div>
@@ -39,19 +39,19 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
         <div className="p-8 flex flex-col items-center gap-6">
           <div className="text-center">
              <div className="text-4xl mb-2">🔒</div>
-             <p className="text-neutral-300">To participate in the chat, please sign in.</p>
-             <p className="text-xs text-neutral-500 mt-2">We use Google Login for secure access.</p>
+             <p className="text-foreground/80">To participate in the chat, please sign in.</p>
+             <p className="text-xs text-foreground/40 mt-2">We use Google Login for secure access.</p>
           </div>
 
           <button
             onClick={handleLogin}
-            className="flex items-center gap-3 bg-white text-black px-6 py-3 rounded-lg font-bold hover:bg-neutral-200 transition-colors w-full justify-center"
+            className="flex items-center gap-3 bg-foreground text-background px-6 py-3 rounded-lg font-bold hover:bg-foreground/90 transition-colors w-full justify-center"
           >
             <svg viewBox="0 0 24 24" className="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
               <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
               <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
             </svg>
             Continue with Google
           </button>

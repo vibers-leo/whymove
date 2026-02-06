@@ -130,7 +130,7 @@ export const ChatRoom = ({ className }: { className?: string }) => {
   };
 
   return (
-    <div className={cn("flex flex-col h-full bg-[#131722] border border-[#2B2B43] rounded-xl overflow-hidden", className)}>
+    <div className={cn("flex flex-col h-full bg-background border border-foreground/10 rounded-xl overflow-hidden", className)}>
       <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
       
       <NicknameModal 
@@ -142,12 +142,12 @@ export const ChatRoom = ({ className }: { className?: string }) => {
       />
 
       {/* Header */}
-      <div className="px-4 py-3 border-b border-[#2B2B43] bg-[#1e222d] flex justify-between items-center">
+      <div className="px-4 py-3 border-b border-foreground/10 bg-foreground/5 flex justify-between items-center">
         <div className="flex items-center gap-2">
            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-           <span className="font-bold text-neutral-200">Live Chat</span>
+           <span className="font-bold text-foreground/80">Live Chat</span>
         </div>
-        <div className="text-xs text-neutral-500 flex items-center gap-1 cursor-pointer hover:text-white" onClick={() => !user && setIsLoginModalOpen(true)}>
+        <div className="text-xs text-foreground/40 flex items-center gap-1 cursor-pointer hover:text-foreground/80" onClick={() => !user && setIsLoginModalOpen(true)}>
            {user ? (
              <div className="flex items-center gap-2" onClick={() => setIsNicknameModalOpen(true)} title="Change Nickname">
                 {user.photoURL ? (
@@ -156,10 +156,10 @@ export const ChatRoom = ({ className }: { className?: string }) => {
                 ) : (
                     <User size={12} />
                 )}
-                <span className={userNickname ? "text-cyan-400 font-bold" : ""}>{userNickname || "Setting up..."}</span>
+                <span className={userNickname ? "text-cyan-500 font-bold" : ""}>{userNickname || "Setting up..."}</span>
              </div>
            ) : (
-             <span className="text-cyan-400 font-bold flex items-center gap-1">
+             <span className="text-cyan-500 font-bold flex items-center gap-1">
                 <User size={12} /> Sign In
              </span>
            )}
@@ -167,9 +167,9 @@ export const ChatRoom = ({ className }: { className?: string }) => {
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 font-mono text-sm scrollbar-thin scrollbar-thumb-neutral-700">
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 font-mono text-sm scrollbar-thin scrollbar-thumb-foreground/10">
          {messages.length === 0 && (
-             <div className="text-center text-neutral-600 py-10 opacity-50">
+             <div className="text-center text-foreground/20 py-10 opacity-50">
                  Connecting to secure channel... <br/>
                  (If this persists, check .env.local)
              </div>
@@ -177,20 +177,20 @@ export const ChatRoom = ({ className }: { className?: string }) => {
 
          {messages.map((msg) => (
            <div key={msg.id} className={cn("animate-in fade-in slide-in-from-bottom-2 duration-300", 
-               msg.type === 'donation' ? "border-l-4 border-yellow-400 bg-yellow-400/10 p-2 rounded" : 
+               msg.type === 'donation' ? "border-l-4 border-yellow-500 bg-yellow-500/10 p-2 rounded" : 
                msg.type === 'alert' ? (msg.side === 'bull' ? "bg-green-500/10 border-l-2 border-green-500 p-1" : "bg-red-500/10 border-l-2 border-red-500 p-1") : ""
            )}>
               {/* Chat Message */}
               {msg.type === 'chat' && (
                  <div className="flex items-start gap-2">
-                    <span className={cn("font-bold whitespace-nowrap flex items-center gap-1", msg.user === userNickname ? "text-cyan-400" : "text-neutral-400")}>
+                    <span className={cn("font-bold whitespace-nowrap flex items-center gap-1", msg.user === userNickname ? "text-cyan-500" : "text-foreground/40")}>
                         {msg.photoURL && (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img src={msg.photoURL} alt="avatar" className="w-4 h-4 rounded-full inline-block" />
                         )}
                         {msg.user}:
                     </span>
-                    <span className="text-neutral-300 break-words leading-relaxed">{msg.text}</span>
+                    <span className="text-foreground/80 break-words leading-relaxed">{msg.text}</span>
                  </div>
               )}
 
@@ -207,7 +207,7 @@ export const ChatRoom = ({ className }: { className?: string }) => {
                   <div className="flex items-center gap-2 text-yellow-500">
                       <DollarSign size={16} fill="currentColor" />
                       <span className="font-bold">{msg.user} donated {msg.amount}!</span>
-                      <span className="text-white text-xs ml-2">&quot;{msg.text}&quot;</span>
+                      <span className="text-foreground text-xs ml-2">&quot;{msg.text}&quot;</span>
                   </div>
               )}
            </div>
@@ -216,17 +216,17 @@ export const ChatRoom = ({ className }: { className?: string }) => {
       </div>
 
       {/* Input Area */}
-      <form onSubmit={handleSendMessage} className="p-3 bg-[#1e222d] border-t border-[#2B2B43] flex gap-2">
+      <form onSubmit={handleSendMessage} className="p-3 bg-foreground/5 border-t border-foreground/10 flex gap-2">
         <input 
           type="text" 
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder={user ? (userNickname ? `Chat as ${userNickname}...` : "Setting up profile...") : "Sign in to chat..."}
-          className="flex-1 bg-[#131722] border border-[#2B2B43] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500 transition-colors"
+          className="flex-1 bg-background border border-foreground/10 rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:border-cyan-500 transition-colors"
         />
         <button 
           type="submit"
-          className={cn("p-2 rounded transition-colors text-white", user ? "bg-cyan-600 hover:bg-cyan-500" : "bg-neutral-700 hover:bg-neutral-600")}
+          className={cn("p-2 rounded transition-colors text-background", user ? "bg-cyan-600 hover:bg-cyan-500" : "bg-foreground/50 hover:bg-foreground/60")}
         >
            <Send size={16} />
         </button>

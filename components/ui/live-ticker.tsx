@@ -92,17 +92,17 @@ export const LiveTicker = ({
           >
              <button
                onClick={() => onSymbolSelect?.(item.tvSymbol)}
-               className="px-6 py-3 flex items-center space-x-3 bg-neutral-900/50 border border-neutral-800 rounded-2xl hover:bg-neutral-800 transition-colors cursor-pointer"
+               className="px-6 py-2 flex items-center space-x-3 bg-foreground/5 border border-foreground/10 rounded-2xl hover:bg-foreground/10 transition-colors cursor-pointer"
              >
                 <div className="flex flex-col items-start">
-                   <span className="font-bold text-gray-100 text-sm">{item.symbol}</span>
+                   <span className="font-bold text-foreground text-sm">{item.symbol}</span>
                 </div>
                 <div className="flex flex-col items-end">
-                   <span className="text-gray-300 text-xs">{item.price}</span>
+                   <span className="text-foreground/60 text-xs">{item.price}</span>
                    <span
                      className={cn(
                        "text-xs font-bold",
-                       item.isUp ? "text-green-400" : "text-red-400"
+                       item.isUp ? "text-green-500" : "text-red-500"
                      )}
                    >
                      {item.change}

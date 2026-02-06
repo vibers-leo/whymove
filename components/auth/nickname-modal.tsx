@@ -55,18 +55,18 @@ export function NicknameModal({ isOpen, onComplete }: NicknameModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
-      <div className="w-full max-w-sm bg-[#1e222d] border border-cyan-500/30 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-background/80 backdrop-blur-md animate-in fade-in duration-300">
+      <div className="w-full max-w-sm bg-background border border-cyan-500/30 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
         {/* Background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-20 bg-cyan-500/20 blur-[50px] rounded-full" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-20 bg-cyan-500/10 blur-[50px] rounded-full" />
 
         <div className="relative z-10 flex flex-col items-center gap-4 text-center">
-            <div className="w-16 h-16 rounded-full bg-cyan-500/20 flex items-center justify-center mb-2">
-                <UserCheck size={32} className="text-cyan-400" />
+            <div className="w-16 h-16 rounded-full bg-cyan-500/10 flex items-center justify-center mb-2">
+                <UserCheck size={32} className="text-cyan-500" />
             </div>
             
-            <h2 className="text-2xl font-bold text-white">Choose Identity</h2>
-            <p className="text-neutral-400 text-sm">
+            <h2 className="text-2xl font-bold text-foreground">Choose Identity</h2>
+            <p className="text-foreground/60 text-sm">
                 How should we call you in the chat? <br/>
                 <span className="text-xs opacity-70">(This will be your trading alias)</span>
             </p>
@@ -78,17 +78,17 @@ export function NicknameModal({ isOpen, onComplete }: NicknameModalProps) {
                         value={nickname}
                         onChange={(e) => setNickname(e.target.value)}
                         placeholder="Ex: CryptoKing"
-                        className="w-full bg-[#131722] border border-[#2B2B43] rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors text-center font-bold"
+                        className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-cyan-500 transition-colors text-center font-bold"
                         autoFocus
                     />
                 </div>
                 
-                {error && <p className="text-red-400 text-xs font-bold">{error}</p>}
+                {error && <p className="text-red-500 text-xs font-bold">{error}</p>}
 
                 <button 
                     type="submit" 
                     disabled={loading || !nickname.trim()}
-                    className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded-lg transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-cyan-600 hover:bg-cyan-500 text-background font-bold py-3 rounded-lg transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {loading ? "Registering..." : "Enter Market"}
                 </button>

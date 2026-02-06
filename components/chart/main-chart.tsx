@@ -1,15 +1,19 @@
 "use client";
 
 import React, { useEffect, useRef, memo } from "react";
+import { useTheme } from "next-themes";
 
 export const MainChart = memo(({ symbol = "BINANCE:BTCUSDT" }: { symbol?: string }) => {
   const container = useRef<HTMLDivElement>(null);
+  const { theme, resolvedTheme } = useTheme();
 
   useEffect(() => {
     if (!container.current) return;
 
     // Clean up previous script if any
     container.current.innerHTML = '';
+
+    const currentTheme = resolvedTheme === "dark" ? "dark" : "light";
 
     const script = document.createElement("script");
     script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
@@ -21,7 +25,7 @@ export const MainChart = memo(({ symbol = "BINANCE:BTCUSDT" }: { symbol?: string
         "symbol": "${symbol}",
         "interval": "D",
         "timezone": "Asia/Seoul",
-        "theme": "dark",
+        "theme": "${currentTheme}",
         "style": "1",
         "locale": "en",
         "enable_publishing": false,
@@ -30,15 +34,15 @@ export const MainChart = memo(({ symbol = "BINANCE:BTCUSDT" }: { symbol?: string
         "support_host": "https://www.tradingview.com"
       }`;
     container.current.appendChild(script);
-  }, [symbol]);
+  }, [symbol, resolvedTheme]);
 
   return (
-    <div className="h-full w-full rounded-xl overflow-hidden border border-[#2B2B43] shadow-xl bg-[#131722]" ref={container}>
+    <div className="h-full w-full rounded-xl overflow-hidden border border-foreground/10 shadow-xl bg-background" ref={container}>
       <div className="tradingview-widget-container" style={{ height: "100%", width: "100%" }}>
         <div className="tradingview-widget-container__widget" style={{ height: "calc(100% - 32px)", width: "100%" }}></div>
         <div className="tradingview-widget-copyright">
           <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">
-            <span className="blue-text">Track all markets on TradingView</span>
+            <span className="blue-text text-xs opacity-50">Track all markets on TradingView</span>
           </a>
         </div>
       </div>

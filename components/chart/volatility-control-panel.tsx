@@ -24,22 +24,22 @@ const TriggerButton = ({
     <button
       onClick={onClick}
       className={cn(
-        "relative flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-[#2B2B43] bg-[#1e222d] text-[#d1d4dc] text-sm font-medium transition-all group overflow-hidden",
-        "hover:border-opacity-100 hover:text-white"
+        "relative flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-foreground/10 bg-background text-foreground/70 text-sm font-medium transition-all group overflow-hidden",
+        "hover:border-foreground/30 hover:text-foreground"
       )}
     >
       <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity", color)} />
       <Icon className={cn("w-4 h-4", color.replace("bg-", "text-"))} />
       <span>{label}</span>
-      <div className="absolute inset-0 rounded-lg ring-1 ring-white/10 group-hover:ring-white/30" />
+      <div className="absolute inset-0 rounded-lg ring-1 ring-foreground/5 group-hover:ring-foreground/10" />
     </button>
   );
 };
 
 export const VolatilityControlPanel = ({ onTrigger, className }: VolatilityControlPanelProps) => {
   return (
-    <div className={cn("flex gap-2 items-center p-2 bg-[#131722]/80 backdrop-blur border border-[#2B2B43] rounded-xl self-start", className)}>
-      <span className="text-xs font-bold text-[#787b86] px-2 uppercase tracking-wider flex items-center gap-1">
+    <div className={cn("flex gap-2 items-center p-2 bg-background/80 backdrop-blur border border-foreground/10 rounded-xl self-start", className)}>
+      <span className="text-xs font-bold text-foreground/50 px-2 uppercase tracking-wider flex items-center gap-1">
         <Radio className="w-3 h-3 text-red-500 animate-pulse" />
         Inject Event:
       </span>

@@ -101,7 +101,7 @@ export default function Home() {
       {/* Background with lower z-index */}
       <div className="absolute inset-0 z-0 pointer-events-none">
          <GridBackground className="h-full w-full opacity-40" />
-         <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
+         <Spotlight className="-top-40 left-0 md:left-60 md:-top-20 text-cyan-500/10" fill="currentColor" />
       </div>
 
       <div className="relative z-10 flex flex-col h-full pt-16">
@@ -118,7 +118,7 @@ export default function Home() {
                
                {/* Top: Chart (Flex Grow) */}
                 <div className="flex-1 min-h-0 border border-foreground/10 rounded-2xl bg-foreground/5 backdrop-blur-md relative overflow-hidden shadow-2xl group">
-                  <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-foreground/5 to-transparent pointer-events-none z-10" />
                   <div className="h-full w-full rounded-xl bg-background flex flex-col">
                       <MainChart />
                   </div>
@@ -128,7 +128,7 @@ export default function Home() {
                <div className="h-[280px] flex gap-3 flex-none min-h-0">
                   {/* Drivers (Wider) */}
                   <div className="flex-[2] border border-foreground/10 rounded-2xl bg-foreground/5 backdrop-blur-md p-4 overflow-hidden flex flex-col">
-                     <h2 className="text-sm font-bold text-neutral-100 mb-3 flex items-center gap-2 flex-none">
+                     <h2 className="text-sm font-bold text-foreground flex items-center gap-2 flex-none">
                         <span className="w-1 h-4 bg-cyan-500 rounded-full" />
                         Market Drivers
                      </h2>
