@@ -95,7 +95,7 @@ export default function Home() {
   ]);
 
   return (
-    <main className="h-screen w-full bg-black relative overflow-hidden text-neutral-200 font-sans selection:bg-cyan-500/30 flex flex-col">
+    <main className="h-screen w-full bg-background relative overflow-hidden text-foreground font-sans selection:bg-cyan-500/30 flex flex-col transition-colors duration-300">
       <Header />
       
       {/* Background with lower z-index */}
@@ -106,7 +106,7 @@ export default function Home() {
 
       <div className="relative z-10 flex flex-col h-full pt-16">
           {/* Ticker - Reduced vertical padding */}
-          <div className="w-full border-b border-white/5 bg-black/40 backdrop-blur-md h-10 flex-none z-20">
+          <div className="w-full border-b border-foreground/5 bg-background/40 backdrop-blur-md h-10 flex-none z-20">
              <LiveTicker items={tickerItems} speed="normal" />
           </div>
 
@@ -117,9 +117,9 @@ export default function Home() {
             <div className="flex-1 flex flex-col gap-3 min-w-0 h-full">
                
                {/* Top: Chart (Flex Grow) */}
-               <div className="flex-1 min-h-0 border border-neutral-800 rounded-2xl bg-neutral-900/30 backdrop-blur-md relative overflow-hidden shadow-2xl group">
+                <div className="flex-1 min-h-0 border border-foreground/10 rounded-2xl bg-foreground/5 backdrop-blur-md relative overflow-hidden shadow-2xl group">
                   <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none z-10" />
-                  <div className="h-full w-full rounded-xl bg-[#131722] flex flex-col">
+                  <div className="h-full w-full rounded-xl bg-background flex flex-col">
                       <MainChart />
                   </div>
                </div>
@@ -127,7 +127,7 @@ export default function Home() {
                {/* Bottom: Drivers & Calendar (Fixed Height ~25-30%) */}
                <div className="h-[280px] flex gap-3 flex-none min-h-0">
                   {/* Drivers (Wider) */}
-                  <div className="flex-[2] border border-neutral-800 rounded-2xl bg-neutral-900/30 backdrop-blur-md p-4 overflow-hidden flex flex-col">
+                  <div className="flex-[2] border border-foreground/10 rounded-2xl bg-foreground/5 backdrop-blur-md p-4 overflow-hidden flex flex-col">
                      <h2 className="text-sm font-bold text-neutral-100 mb-3 flex items-center gap-2 flex-none">
                         <span className="w-1 h-4 bg-cyan-500 rounded-full" />
                         Market Drivers
@@ -138,14 +138,14 @@ export default function Home() {
                   </div>
 
                   {/* Calendar (Narrower, Fixed) */}
-                  <div className="flex-1 border border-neutral-800 rounded-2xl bg-neutral-900/30 backdrop-blur-md p-4 overflow-hidden flex flex-col min-w-[300px]">
+                  <div className="flex-1 border border-foreground/10 rounded-2xl bg-foreground/5 backdrop-blur-md p-4 overflow-hidden flex flex-col min-w-[300px]">
                       <MarketCalendar events={calendarEvents} />
                   </div>
                </div>
             </div>
 
             {/* RIGHT COLUMN: Chat (Fixed Width ~350-400px) */}
-            <div className="w-full lg:w-[380px] xl:w-[420px] flex-none border border-neutral-800 rounded-2xl bg-neutral-900/30 backdrop-blur-md overflow-hidden shadow-2xl shadow-black/50 h-full">
+            <div className="w-full lg:w-[380px] xl:w-[420px] flex-none border border-foreground/10 rounded-2xl bg-foreground/5 backdrop-blur-md overflow-hidden shadow-2xl h-full">
                <ChatRoom className="h-full" />
             </div>
 

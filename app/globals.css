@@ -1,15 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  /* Cyberpunk Palette */
+  --background: #ffffff;
+  --foreground: #171717;
+  --color-primary: #22c55e;
+  --color-secondary: #d946ef;
+  --color-accent: #06b6d4;
+}
+
+.dark {
   --background: #000000;
   --foreground: #eeeeee;
-
-  /* Neon Accents - Toned Down */
-  --color-primary: #4ade80; /* Softer Green */
-  --color-secondary: #e879f9; /* Softer Magenta */
-  --color-accent: #22d3ee; /* Softer Cyan */
+  --color-primary: #4ade80;
+  --color-secondary: #e879f9;
+  --color-accent: #22d3ee;
 }
+
 
 @theme inline {
   --color-background: var(--background);

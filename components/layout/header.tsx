@@ -5,6 +5,7 @@ import { useAuth } from "@/components/auth/auth-provider";
 import { Bell, User, LogOut, Settings } from "lucide-react";
 import { LoginModal } from "@/components/auth/login-modal";
 import { getAuth, signOut } from "firebase/auth";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export function Header() {
   const { user } = useAuth();
@@ -22,22 +23,25 @@ export function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 h-16 bg-black/50 backdrop-blur-md border-b border-white/10 z-50 flex items-center justify-between px-4 md:px-8">
+      <header className="fixed top-0 left-0 right-0 h-16 bg-background/50 backdrop-blur-md border-b border-foreground/10 z-50 flex items-center justify-between px-4 md:px-8">
         {/* Logo */}
         <div className="flex items-center gap-2">
            <div className="w-8 h-8 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center font-bold text-white text-xl shadow-[0_0_15px_rgba(6,182,212,0.5)]">
              W
            </div>
-           <span className="font-bold text-lg tracking-tight text-white hidden md:block">
+           <span className="font-bold text-lg tracking-tight text-foreground hidden md:block">
              WhyMove
            </span>
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
+           {/* Theme Toggle */}
+           <ThemeToggle />
+
            {/* News Notification */}
            <button 
-             className="relative p-2 text-neutral-400 hover:text-white transition-colors"
+             className="relative p-2 text-neutral-400 hover:text-foreground transition-colors"
              onClick={() => setHasNewNews(false)}
              title="News Alerts"
            >
@@ -46,6 +50,7 @@ export function Header() {
                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
              )}
            </button>
+
 
            {/* User Menu */}
            {user ? (
