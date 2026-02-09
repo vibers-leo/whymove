@@ -23,14 +23,24 @@ export const MainChart = memo(({ symbol = "BINANCE:BTCUSDT" }: { symbol?: string
       {
         "autosize": true,
         "symbol": "${symbol}",
-        "interval": "D",
+        "interval": "15",
         "timezone": "Asia/Seoul",
         "theme": "${currentTheme}",
         "style": "1",
-        "locale": "en",
+        "locale": "ko",
+        "toolbar_bg": "#f1f3f6",
         "enable_publishing": false,
         "allow_symbol_change": true,
+        "save_image": false,
+        "container_id": "tradingview_chart",
+        "hide_side_toolbar": false,
+        "withdateranges": true,
+        "details": false,
+        "hotlist": false,
         "calendar": false,
+        "show_popup_button": true,
+        "popup_width": "1000",
+        "popup_height": "650",
         "support_host": "https://www.tradingview.com"
       }`;
     container.current.appendChild(script);
