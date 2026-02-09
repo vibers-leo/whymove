@@ -3,16 +3,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { Send, User, TrendingUp, TrendingDown, DollarSign } from "lucide-react";
-import { rtdb } from "@/lib/firebase";
-import { ref, onValue, push, serverTimestamp, query, limitToLast, orderByChild } from "firebase/database";
+import { supabase } from "@/lib/supabase";
 import { NicknameModal } from "@/components/auth/nickname-modal";
 import { LoginModal } from "@/components/auth/login-modal";
 import { useAuth } from "@/components/auth/auth-provider";
-import { get, child } from "firebase/database";
+
 export type MessageType = "chat" | "alert" | "donation";
 
 export interface ChatMessage {
-  id: string;
+  id: string | number;
   type: MessageType;
   user?: string;
   photoURL?: string;
@@ -23,12 +22,9 @@ export interface ChatMessage {
   sentiment?: "bullish" | "bearish" | "neutral";
 }
 
-// Initial/Fallback Data
 const INITIAL_MESSAGES: ChatMessage[] = [
   { id: "1", type: "chat", text: "System: Connecting to live channel...", timestamp: "Now" },
 ];
-
-
 
 export const ChatRoom = ({ className }: { className?: string }) => {
   const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
@@ -42,52 +38,77 @@ export const ChatRoom = ({ className }: { className?: string }) => {
 
   // Check/Load user profile on login
   useEffect(() => {
-    if (user && rtdb) {
-        // 1. Try local storage first for speed
+    if (user) {
         const cached = localStorage.getItem("whymove_nickname");
         if (cached) {
             setUserNickname(cached);
         }
 
-        // 2. Verify with DB (source of truth)
-        get(child(ref(rtdb), `users/${user.uid}`)).then((snapshot) => {
-            if (snapshot.exists()) {
-                const data = snapshot.val();
+        supabase
+          .from('profiles')
+          .select('nickname')
+          .eq('id', user.id)
+          .single()
+          .then(({ data, error }) => {
+            if (data && !error) {
                 setUserNickname(data.nickname);
                 localStorage.setItem("whymove_nickname", data.nickname);
-            } else {
-                // New user! Trigger Onboarding
+            } else if (error && error.code === 'PGRST116') { // Not found
                 setIsNicknameModalOpen(true);
             }
-        }).catch((err) => {
-            console.error("Error fetching profile:", err);
-        });
+          });
     } else {
         setUserNickname(null);
     }
   }, [user]);
 
-  // Subscribe to Firebase Realtime Database
+  // Subscribe to Supabase Realtime
   useEffect(() => {
-    if (!rtdb) return;
+    // 1. Fetch initial messages
+    supabase
+      .from('messages')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(50)
+      .then(({ data, error }) => {
+        if (data && !error) {
+          const formatted = data.reverse().map(m => ({
+            id: m.id,
+            type: m.type,
+            user: m.user_nickname,
+            photoURL: m.photo_url,
+            text: m.text,
+            timestamp: m.created_at,
+            amount: m.amount,
+            side: m.side,
+            sentiment: m.sentiment
+          }));
+          setMessages(formatted);
+        }
+      });
 
-    const messagesRef = query(ref(rtdb, "messages"), orderByChild("timestamp"), limitToLast(50));
-    
-    const unsubscribe = onValue(messagesRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const loadedMessages = Object.entries(data).map(([key, value]) => ({
-          id: key,
-          ...(value as Omit<ChatMessage, "id">),
-        }));
-        loadedMessages.sort((a, b) => (a.timestamp > b.timestamp ? 1 : -1));
-        setMessages(loadedMessages);
-      } else {
-        setMessages([]); 
-      }
-    });
+    // 2. Subscribe to new messages
+    const channel = supabase
+      .channel('public:messages')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
+        const newMessage = {
+          id: payload.new.id,
+          type: payload.new.type,
+          user: payload.new.user_nickname,
+          photoURL: payload.new.photo_url,
+          text: payload.new.text,
+          timestamp: payload.new.created_at,
+          amount: payload.new.amount,
+          side: payload.new.side,
+          sentiment: payload.new.sentiment
+        };
+        setMessages((prev) => [...prev, newMessage]);
+      })
+      .subscribe();
 
-    return () => unsubscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   // Auto-scroll to bottom
@@ -97,31 +118,28 @@ export const ChatRoom = ({ className }: { className?: string }) => {
 
   const handleSendMessage = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    
-    // Auth Check
     if (!user) {
         setIsLoginModalOpen(true);
         return;
     }
-
-    // Onboarding Check
     if (!userNickname) {
         setIsNicknameModalOpen(true);
         return;
     }
-
     if (!input.trim()) return;
 
     try {
-        if (!rtdb) throw new Error("Database not initialized");
-
-        await push(ref(rtdb, "messages"), {
-            user: userNickname, // Use nickname instead of displayName
-            photoURL: user.photoURL,
+        const photoURL = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
+        const { error } = await supabase
+          .from('messages')
+          .insert({
+            user_nickname: userNickname,
+            photo_url: photoURL,
             text: input,
             type: "chat",
-            timestamp: serverTimestamp(),
-        });
+          });
+        
+        if (error) throw error;
         setInput("");
     } catch (error) {
         console.error("Error sending message:", error);
@@ -150,9 +168,9 @@ export const ChatRoom = ({ className }: { className?: string }) => {
         <div className="text-xs text-foreground/40 flex items-center gap-1 cursor-pointer hover:text-foreground/80" onClick={() => !user && setIsLoginModalOpen(true)}>
            {user ? (
              <div className="flex items-center gap-2" onClick={() => setIsNicknameModalOpen(true)} title="Change Nickname">
-                {user.photoURL ? (
+                {user.user_metadata?.avatar_url || user.user_metadata?.picture ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={user.photoURL} alt="user" className="w-4 h-4 rounded-full" />
+                    <img src={user.user_metadata?.avatar_url || user.user_metadata?.picture} alt="user" className="w-4 h-4 rounded-full" />
                 ) : (
                     <User size={12} />
                 )}

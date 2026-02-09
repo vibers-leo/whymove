@@ -2,24 +2,26 @@
 
 import React, { useState } from "react";
 import { useAuth } from "@/components/auth/auth-provider";
-import { Bell, User, LogOut, Settings } from "lucide-react";
+import { User, LogOut, Settings } from "lucide-react";
 import { LoginModal } from "@/components/auth/login-modal";
-import { getAuth, signOut } from "firebase/auth";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { PushNotificationManager } from "@/components/notification/push-notification";
 
 export function Header() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [hasNewNews, setHasNewNews] = useState(true); // Simulated "new news" state
 
   const handleLogout = async () => {
     try {
-      await signOut(getAuth());
+      await logout();
     } catch (err) {
       console.error("Logout failed:", err);
     }
   };
+
+  const displayName = user?.user_metadata?.full_name || user?.user_metadata?.name || "Trader";
+  const photoURL = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
 
   return (
     <>
@@ -39,17 +41,8 @@ export function Header() {
            {/* Theme Toggle */}
            <ThemeToggle />
 
-           {/* News Notification */}
-           <button 
-             className="relative p-2 text-neutral-400 hover:text-foreground transition-colors"
-             onClick={() => setHasNewNews(false)}
-             title="News Alerts"
-           >
-             <Bell size={20} />
-             {hasNewNews && (
-               <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
-             )}
-           </button>
+           {/* Push Notification Toggle */}
+           <PushNotificationManager />
 
 
            {/* User Menu */}
@@ -60,11 +53,11 @@ export function Header() {
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
                    <span className="text-sm font-medium text-neutral-200 hidden md:block ml-2">
-                     {user.displayName || "Trader"}
+                     {displayName}
                    </span>
-                   {user.photoURL ? (
+                   {photoURL ? (
                      // eslint-disable-next-line @next/next/no-img-element
-                     <img src={user.photoURL} alt="Profile" className="w-8 h-8 rounded-full border border-white/20" />
+                     <img src={photoURL} alt="Profile" className="w-8 h-8 rounded-full border border-white/20" />
                    ) : (
                      <div className="w-8 h-8 rounded-full bg-cyan-900/50 flex items-center justify-center text-cyan-400 border border-cyan-500/30">
                         <User size={16} />
@@ -75,7 +68,7 @@ export function Header() {
                 {/* Dropdown */}
                 <div className="absolute right-0 top-full mt-2 w-48 bg-background border border-foreground/10 rounded-xl shadow-xl overflow-hidden hidden group-hover:block hover:block animation-in fade-in slide-in-from-top-2 duration-200">
                     <div className="px-4 py-3 border-b border-foreground/10">
-                       <p className="text-sm text-foreground font-bold truncate">{user.displayName || "Unknown"}</p>
+                       <p className="text-sm text-foreground font-bold truncate">{displayName}</p>
                        <p className="text-xs text-foreground/50 truncate">{user.email}</p>
                     </div>
                     <button className="w-full text-left px-4 py-3 text-sm text-foreground/70 hover:bg-foreground/5 flex items-center gap-2 transition-colors">
@@ -95,7 +88,7 @@ export function Header() {
            ) : (
              <button 
                onClick={() => setIsLoginModalOpen(true)}
-               className="px-4 py-2 bg-white text-black text-sm font-bold rounded-full hover:bg-neutral-200 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+               className="px-4 py-2 bg-foreground text-background text-sm font-bold rounded-full hover:bg-foreground/90 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.1)]"
              >
                Sign In
              </button>

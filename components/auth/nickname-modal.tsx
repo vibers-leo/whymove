@@ -2,8 +2,7 @@
 
 import React, { useState } from "react";
 import { useAuth } from "@/components/auth/auth-provider";
-import { ref, set } from "firebase/database";
-import { rtdb } from "@/lib/firebase";
+import { supabase } from "@/lib/supabase";
 import { UserCheck } from "lucide-react";
 
 interface NicknameModalProps {
@@ -31,16 +30,24 @@ export function NicknameModal({ isOpen, onComplete }: NicknameModalProps) {
     setError("");
 
     try {
-      // Check if nickname already exists (Simple check, ideally we'd have a separate index)
-      // For MVP, we just overwrite/set user profile
-      
-      const userRef = ref(rtdb, `users/${user.uid}`);
-      await set(userRef, {
-        nickname: nickname,
-        email: user.email,
-        photoURL: user.photoURL,
-        joinedAt: Date.now()
-      });
+      const { error: upsertError } = await supabase
+        .from('profiles')
+        .upsert({
+          id: user.id,
+          nickname: nickname,
+          email: user.email,
+          avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture,
+          updated_at: new Date().toISOString(),
+        });
+
+      if (upsertError) {
+        if (upsertError.code === '23505') {
+          setError("This nickname is already taken.");
+        } else {
+          throw upsertError;
+        }
+        return;
+      }
 
       // Save to local storage as backup/cache
       localStorage.setItem("whymove_nickname", nickname);
