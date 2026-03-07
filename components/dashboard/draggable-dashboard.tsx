@@ -5,10 +5,11 @@ import { MainChart } from "@/components/chart/main-chart";
 import { ChatRoom } from "@/components/community/chat-room";
 import { SocialFeed } from "@/components/feed/social-feed";
 import { MarketCalendar } from "@/components/ui/market-calendar";
-import { VolatilityControlPanel, ChartEventOverlay, ChartEvent } from "@/components/chart/volatility-control-panel";
+import { VolatilityControlPanel, ChartEventOverlay, type ChartEvent, type ChartEventType } from "@/components/chart/volatility-control-panel";
+import { EventArchive } from "@/components/archive/event-archive";
 
 interface DashboardProps {
-  handleTrigger: (type: "trump" | "cpi" | "war" | "pump") => void;
+  handleTrigger: (type: string) => void;
 }
 
 export const DraggableDashboard = ({
@@ -16,19 +17,27 @@ export const DraggableDashboard = ({
 }: DashboardProps) => {
   const [chartEvents, setChartEvents] = useState<ChartEvent[]>([]);
 
-  const handleEventTrigger = useCallback((type: "trump" | "cpi" | "war" | "pump") => {
+  const handleEventTrigger = useCallback((type: ChartEventType) => {
+    const eventConfig: Record<string, { label: string; labelKr: string; color: string }> = {
+      trump: { label: "Trump Tweet Detected!", labelKr: "🔥 트럼프 발언 감지!", color: "orange" },
+      cpi: { label: "CPI Data Released!", labelKr: "📊 CPI 데이터 발표!", color: "red" },
+      pump: { label: "Musk Pump Alert!", labelKr: "🚀 머스크 펌프 알림!", color: "cyan" },
+      war: { label: "Geopolitical Alert!", labelKr: "⚔️ 지정학적 이슈 발생!", color: "amber" },
+    };
+
+    const config = eventConfig[type] || { label: `${type} Alert`, labelKr: `${type} 알림`, color: "blue" };
+
     const newEvent: ChartEvent = {
       id: `${Date.now()}-${type}`,
-      type: type as "trump" | "cpi" | "pump",
-      label: type === "trump" 
-        ? "🔥 Trump Tweet Detected!" 
-        : type === "cpi" 
-          ? "📊 CPI Data Released!" 
-          : "🚀 Musk Pump Alert!",
-      color: type === "trump" ? "orange" : type === "cpi" ? "red" : "cyan",
+      type,
+      label: config.label,
+      labelKr: config.labelKr,
+      color: config.color,
       timestamp: new Date(),
+      severity: "high",
+      dismissable: true,
     };
-    
+
     setChartEvents(prev => [...prev, newEvent]);
     setTimeout(() => {
       setChartEvents(prev => prev.filter(e => e.id !== newEvent.id));
@@ -45,8 +54,8 @@ export const DraggableDashboard = ({
     <div className="w-full h-full flex gap-3">
       {/* LEFT COLUMN */}
       <div className="flex-1 flex flex-col gap-3 min-w-0">
-        {/* Chart Widget - 70% */}
-        <div className="flex-[7] min-h-0 border border-foreground/10 rounded-xl bg-foreground/5 backdrop-blur-md overflow-hidden shadow-xl relative">
+        {/* Chart Widget - 65% */}
+        <div className="flex-[6.5] min-h-0 border border-foreground/10 rounded-xl bg-foreground/5 backdrop-blur-md overflow-hidden shadow-xl relative">
           {/* Event Control Panel */}
           <div className="absolute top-2 left-2 z-30">
             <VolatilityControlPanel onTrigger={handleEventTrigger} />
@@ -61,14 +70,19 @@ export const DraggableDashboard = ({
           </div>
         </div>
 
-        {/* Bottom Row - 30% */}
-        <div className="flex-[3] min-h-0 flex gap-3">
-          {/* Social Feed Widget - Real-time posts from influencers */}
+        {/* Bottom Row - 35% */}
+        <div className="flex-[3.5] min-h-0 flex gap-3">
+          {/* Social Feed Widget */}
           <div className="flex-1 border border-foreground/10 rounded-xl bg-foreground/5 backdrop-blur-md overflow-hidden shadow-xl flex flex-col p-3">
             <SocialFeed maxPosts={10} showHeader={true} />
           </div>
 
-          {/* Calendar Widget - Now with real data */}
+          {/* Event Archive Widget */}
+          <div className="flex-1 border border-foreground/10 rounded-xl bg-foreground/5 backdrop-blur-md overflow-hidden shadow-xl flex flex-col p-3">
+            <EventArchive maxEvents={10} showHeader={true} compact={true} />
+          </div>
+
+          {/* Calendar Widget */}
           <div className="flex-1 border border-foreground/10 rounded-xl bg-foreground/5 backdrop-blur-md overflow-hidden shadow-xl flex flex-col p-3">
             <MarketCalendar useRealData={true} maxEvents={5} />
           </div>

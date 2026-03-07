@@ -10,12 +10,23 @@ interface PushNotificationManagerProps {
   className?: string;
 }
 
+// Extended alert types for futures/crypto traders
+export type AlertType =
+  | "trump"        // Trump/political statements
+  | "cpi"          // CPI/economic data releases
+  | "musk"         // Elon Musk/influencer activity
+  | "general"      // General alerts
+  | "volatility"   // Auto-detected volatility spike
+  | "pre_event"    // Scheduled event countdown
+  | "war"          // Geopolitical/war events
+  | "whale"        // Large transactions
+  | "liquidation"; // Mass liquidation events
+
 export function usePushNotifications() {
   const [permission, setPermission] = useState<NotificationPermission>("default");
   const [isSupported, setIsSupported] = useState(false);
 
   useEffect(() => {
-    // Check if browser supports notifications
     if (typeof window !== "undefined" && "Notification" in window) {
       setIsSupported(true);
       setPermission(Notification.permission);
@@ -67,21 +78,26 @@ export function usePushNotifications() {
     [isSupported, permission]
   );
 
-  // Send a volatility alert
+  // Send a volatility alert with extended types
   const sendVolatilityAlert = useCallback(
-    (type: "trump" | "cpi" | "musk" | "general", message: string) => {
-      const titles: Record<string, string> = {
+    (type: AlertType, message: string) => {
+      const titles: Record<AlertType, string> = {
         trump: "🔥 트럼프 발언 감지!",
         cpi: "📊 경제지표 발표!",
         musk: "🚀 일론 머스크 트윗!",
         general: "⚡ 변동성 알림",
+        volatility: "🚨 급변동 감지!",
+        pre_event: "⏰ 이벤트 임박!",
+        war: "⚔️ 지정학적 이슈!",
+        whale: "🐋 고래 알림!",
+        liquidation: "💥 대규모 청산!",
       };
 
       const title = titles[type] || titles.general;
 
       return sendNotification(title, {
         body: message,
-        requireInteraction: true, // Notification stays until user interacts
+        requireInteraction: type === "volatility" || type === "war" || type === "pre_event",
       });
     },
     [sendNotification]
@@ -102,7 +118,7 @@ export function PushNotificationManager({ className }: PushNotificationManagerPr
   const [isLoading, setIsLoading] = useState(false);
 
   if (!isSupported) {
-    return null; // Don't show anything if not supported
+    return null;
   }
 
   const handleEnable = async () => {
@@ -157,21 +173,22 @@ export function PushNotificationManager({ className }: PushNotificationManagerPr
 interface ToastProps {
   title: string;
   message: string;
-  type: "success" | "warning" | "error" | "info";
+  type: "success" | "warning" | "error" | "info" | "volatility";
   onClose: () => void;
 }
 
 export function Toast({ title, message, type, onClose }: ToastProps) {
   useEffect(() => {
-    const timer = setTimeout(onClose, 5000);
+    const timer = setTimeout(onClose, type === "volatility" ? 10000 : 5000);
     return () => clearTimeout(timer);
-  }, [onClose]);
+  }, [onClose, type]);
 
   const colors = {
     success: "bg-emerald-500/10 border-emerald-500/30 text-emerald-400",
     warning: "bg-yellow-500/10 border-yellow-500/30 text-yellow-400",
     error: "bg-red-500/10 border-red-500/30 text-red-400",
     info: "bg-cyan-500/10 border-cyan-500/30 text-cyan-400",
+    volatility: "bg-orange-500/10 border-orange-500/30 text-orange-400 ring-1 ring-orange-500/20",
   };
 
   return (

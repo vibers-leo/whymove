@@ -9,13 +9,20 @@ import { supabase } from "@/lib/supabase";
 import { DraggableDashboard } from "@/components/dashboard/draggable-dashboard";
 
 export default function Home() {
-  // Static ticker data
+  // Ticker items: US futures + crypto futures (core niche)
   const tickerItems = [
-    { symbol: "BTC/USDT", price: "98,420", change: "+4.2%", isUp: true, tvSymbol: "BINANCE:BTCUSDT" },
-    { symbol: "ETH/USDT", price: "2,850", change: "+1.2%", isUp: true, tvSymbol: "BINANCE:ETHUSDT" },
-    { symbol: "SOL/USDT", price: "145", change: "-0.5%", isUp: false, tvSymbol: "BINANCE:SOLUSDT" },
-    { symbol: "BNB/USDT", price: "620", change: "+0.8%", isUp: true, tvSymbol: "BINANCE:BNBUSDT" },
-    { symbol: "XRP/USDT", price: "1.20", change: "-2.1%", isUp: false, tvSymbol: "BINANCE:XRPUSDT" },
+    // US Stock Futures
+    { symbol: "S&P 500", price: "—", change: "—", isUp: true, tvSymbol: "CME_MINI:ES1!" },
+    { symbol: "NASDAQ", price: "—", change: "—", isUp: true, tvSymbol: "CME_MINI:NQ1!" },
+    { symbol: "DOW", price: "—", change: "—", isUp: true, tvSymbol: "CBOT_MINI:YM1!" },
+    // Crypto
+    { symbol: "BTC/USDT", price: "—", change: "—", isUp: true, tvSymbol: "BINANCE:BTCUSDT" },
+    { symbol: "ETH/USDT", price: "—", change: "—", isUp: true, tvSymbol: "BINANCE:ETHUSDT" },
+    // Commodities
+    { symbol: "Gold", price: "—", change: "—", isUp: true, tvSymbol: "COMEX:GC1!" },
+    { symbol: "Crude Oil", price: "—", change: "—", isUp: false, tvSymbol: "NYMEX:CL1!" },
+    // VIX (fear gauge)
+    { symbol: "VIX", price: "—", change: "—", isUp: false, tvSymbol: "TVC:VIX" },
   ];
 
   const handleTrigger = async (type: string) => {
@@ -34,6 +41,10 @@ export default function Home() {
       case "pump":
         alertText = "🚀 WHALE ALERT: Elon Musk updated his Bio with DOGE symbol!";
         side = "bull";
+        break;
+      case "war":
+        alertText = "⚔️ GEOPOLITICAL ALERT: Major escalation detected - Oil & Gold surging, equities dropping!";
+        side = "bear";
         break;
     }
 

@@ -1,6 +1,6 @@
 // Economic Calendar Data
 // This file contains upcoming economic events that may cause market volatility
-// Data should be updated regularly
+// TODO: Migrate to Supabase economic_calendar table for dynamic updates
 
 export interface EconomicEvent {
   id: string;
@@ -14,18 +14,20 @@ export interface EconomicEvent {
   descriptionKr?: string;
   previousValue?: string;
   forecast?: string;
+  actualValue?: string;
   source?: string;
+  alertBeforeMinutes?: number[]; // e.g., [1440, 60, 30, 5] for D-1, H-1, M-30, M-5
 }
 
-// February 2026 Economic Calendar
+// March 2026 Economic Calendar
 // Times are in UTC
 export const economicEvents: EconomicEvent[] = [
   // FOMC & Fed Events
   {
-    id: "fomc-feb-2026",
+    id: "fomc-mar-2026",
     title: "FOMC Interest Rate Decision",
     titleKr: "FOMC 금리 결정",
-    datetime: "2026-02-19T19:00:00Z", // 한국시간 02.20 04:00
+    datetime: "2026-03-18T18:00:00Z",
     category: "fed",
     impact: "high",
     country: "US",
@@ -33,58 +35,80 @@ export const economicEvents: EconomicEvent[] = [
     descriptionKr: "연방준비제도 기준금리 발표",
     forecast: "4.25%",
     previousValue: "4.25%",
+    alertBeforeMinutes: [1440, 60, 30, 5],
   },
   {
-    id: "fomc-minutes-feb-2026",
-    title: "FOMC Meeting Minutes",
-    titleKr: "FOMC 회의록 공개",
-    datetime: "2026-02-20T19:00:00Z",
+    id: "fomc-press-mar-2026",
+    title: "Fed Chair Powell Press Conference",
+    titleKr: "파월 의장 기자회견",
+    datetime: "2026-03-18T18:30:00Z",
     category: "fed",
-    impact: "medium",
+    impact: "high",
     country: "US",
-    description: "Detailed minutes from the previous FOMC meeting",
-    descriptionKr: "이전 FOMC 회의 상세 회의록",
+    descriptionKr: "FOMC 금리 결정 후 파월 의장 기자회견",
+    alertBeforeMinutes: [30, 5],
   },
-  
+
   // CPI & Inflation
   {
-    id: "cpi-feb-2026",
+    id: "cpi-mar-2026",
     title: "US CPI (Consumer Price Index)",
     titleKr: "미국 소비자물가지수 (CPI)",
-    datetime: "2026-02-12T13:30:00Z", // 한국시간 22:30
+    datetime: "2026-03-12T12:30:00Z",
     category: "macro",
     impact: "high",
     country: "US",
-    description: "January CPI data - Key inflation indicator",
-    descriptionKr: "1월 CPI 데이터 - 인플레이션 핵심 지표",
+    description: "February CPI data - Key inflation indicator",
+    descriptionKr: "2월 CPI 데이터 - 인플레이션 핵심 지표",
     forecast: "2.9%",
-    previousValue: "2.9%",
+    previousValue: "3.0%",
+    alertBeforeMinutes: [1440, 60, 30, 5],
   },
   {
-    id: "core-cpi-feb-2026",
+    id: "core-cpi-mar-2026",
     title: "US Core CPI (ex Food & Energy)",
     titleKr: "미국 근원 CPI (식품/에너지 제외)",
-    datetime: "2026-02-12T13:30:00Z",
+    datetime: "2026-03-12T12:30:00Z",
     category: "macro",
     impact: "high",
     country: "US",
-    description: "Core CPI excluding volatile food and energy prices",
     descriptionKr: "변동성 높은 식품/에너지 제외한 CPI",
     forecast: "3.2%",
-    previousValue: "3.2%",
+    previousValue: "3.3%",
   },
   {
-    id: "ppi-feb-2026",
+    id: "ppi-mar-2026",
     title: "US PPI (Producer Price Index)",
     titleKr: "미국 생산자물가지수 (PPI)",
-    datetime: "2026-02-13T13:30:00Z",
+    datetime: "2026-03-13T12:30:00Z",
     category: "macro",
     impact: "medium",
     country: "US",
-    description: "January PPI data - Leading indicator for CPI",
-    descriptionKr: "1월 PPI 데이터 - CPI 선행 지표",
+    descriptionKr: "2월 PPI 데이터 - CPI 선행 지표",
   },
-  
+  {
+    id: "retail-sales-mar-2026",
+    title: "US Retail Sales",
+    titleKr: "미국 소매판매",
+    datetime: "2026-03-17T12:30:00Z",
+    category: "macro",
+    impact: "medium",
+    country: "US",
+    descriptionKr: "2월 소매판매 데이터 - 소비 동향 지표",
+  },
+  {
+    id: "pce-mar-2026",
+    title: "US PCE Price Index",
+    titleKr: "미국 PCE 물가지수",
+    datetime: "2026-03-28T12:30:00Z",
+    category: "macro",
+    impact: "high",
+    country: "US",
+    description: "Fed's preferred inflation measure",
+    descriptionKr: "연준 선호 인플레이션 지표 (핵심 PCE)",
+    alertBeforeMinutes: [1440, 60, 30, 5],
+  },
+
   // Employment
   {
     id: "nfp-mar-2026",
@@ -97,76 +121,95 @@ export const economicEvents: EconomicEvent[] = [
     description: "February employment report - Major market mover",
     descriptionKr: "2월 고용보고서 - 시장 핵심 지표",
     forecast: "180K",
+    alertBeforeMinutes: [1440, 60, 30, 5],
   },
   {
-    id: "jobless-claims-1",
+    id: "jobless-claims-mar-1",
     title: "Initial Jobless Claims",
     titleKr: "신규 실업수당 청구건수",
-    datetime: "2026-02-13T13:30:00Z",
-    category: "employment",
-    impact: "medium",
-    country: "US",
-    description: "Weekly jobless claims data",
-    descriptionKr: "주간 실업수당 청구 데이터",
-  },
-  {
-    id: "jobless-claims-2",
-    title: "Initial Jobless Claims",
-    titleKr: "신규 실업수당 청구건수",
-    datetime: "2026-02-20T13:30:00Z",
+    datetime: "2026-03-13T13:30:00Z",
     category: "employment",
     impact: "medium",
     country: "US",
   },
-  
+  {
+    id: "jobless-claims-mar-2",
+    title: "Initial Jobless Claims",
+    titleKr: "신규 실업수당 청구건수",
+    datetime: "2026-03-20T13:30:00Z",
+    category: "employment",
+    impact: "medium",
+    country: "US",
+  },
+  {
+    id: "jobless-claims-mar-3",
+    title: "Initial Jobless Claims",
+    titleKr: "신규 실업수당 청구건수",
+    datetime: "2026-03-27T13:30:00Z",
+    category: "employment",
+    impact: "medium",
+    country: "US",
+  },
+
   // Political Events
   {
-    id: "trump-speech-feb-2026",
-    title: "President Trump - State of the Union",
-    titleKr: "트럼프 대통령 - 국정연설",
-    datetime: "2026-02-25T02:00:00Z", // 한국시간 11:00
+    id: "us-iran-tensions",
+    title: "US-Iran Diplomatic Talks",
+    titleKr: "미국-이란 외교 협상",
+    datetime: "2026-03-15T14:00:00Z",
     category: "political",
     impact: "high",
     country: "US",
-    description: "Annual address to Congress - May include crypto/tariff comments",
-    descriptionKr: "연례 의회 연설 - 암호화폐/관세 언급 가능성",
+    descriptionKr: "미국-이란 긴장 관련 외교 협상 - 원유/금 선물 변동성 주의",
+    alertBeforeMinutes: [1440, 60, 30],
   },
+
+  // Earnings
   {
-    id: "powell-speech-feb-2026",
-    title: "Fed Chair Powell Speech",
-    titleKr: "파월 연준 의장 연설",
-    datetime: "2026-02-18T15:00:00Z",
-    category: "fed",
-    impact: "high",
-    country: "US",
-    description: "Powell speaks at economic forum",
-    descriptionKr: "파월 의장 경제 포럼 연설",
-  },
-  
-  // Big Tech Earnings (Example)
-  {
-    id: "nvda-earnings-feb-2026",
-    title: "NVIDIA (NVDA) Q4 Earnings",
-    titleKr: "엔비디아 (NVDA) 4분기 실적",
-    datetime: "2026-02-26T21:00:00Z",
+    id: "orcl-earnings-mar-2026",
+    title: "Oracle (ORCL) Q3 Earnings",
+    titleKr: "오라클 (ORCL) 3분기 실적",
+    datetime: "2026-03-10T21:00:00Z",
     category: "earnings",
-    impact: "high",
+    impact: "medium",
     country: "US",
-    description: "AI chip leader earnings - Major market catalyst",
-    descriptionKr: "AI 칩 선두주자 실적 발표 - 시장 촉매제",
+    descriptionKr: "클라우드/AI 인프라 수혜 기업 실적",
   },
-  
-  // Crypto Specific
   {
-    id: "btc-etf-deadline",
-    title: "SEC ETF Decision Deadline",
-    titleKr: "SEC ETF 결정 마감일",
-    datetime: "2026-02-28T23:59:00Z",
+    id: "adbe-earnings-mar-2026",
+    title: "Adobe (ADBE) Q1 Earnings",
+    titleKr: "어도비 (ADBE) 1분기 실적",
+    datetime: "2026-03-18T21:00:00Z",
+    category: "earnings",
+    impact: "medium",
+    country: "US",
+    descriptionKr: "AI 소프트웨어 수혜 기업 실적",
+  },
+
+  // Crypto Events
+  {
+    id: "eth-pectra-upgrade",
+    title: "Ethereum Pectra Upgrade",
+    titleKr: "이더리움 Pectra 업그레이드",
+    datetime: "2026-03-25T12:00:00Z",
     category: "crypto",
     impact: "high",
+    country: "GLOBAL",
+    descriptionKr: "이더리움 네트워크 대규모 업그레이드 - ETH 변동성 주의",
+    alertBeforeMinutes: [1440, 60, 30, 5],
+  },
+
+  // April preview
+  {
+    id: "nfp-apr-2026",
+    title: "US Non-Farm Payrolls (NFP)",
+    titleKr: "미국 비농업 고용지표 (NFP)",
+    datetime: "2026-04-03T12:30:00Z",
+    category: "employment",
+    impact: "high",
     country: "US",
-    description: "Final deadline for SEC decision on pending ETF applications",
-    descriptionKr: "대기 중인 ETF 신청에 대한 SEC 최종 결정 마감",
+    descriptionKr: "3월 고용보고서",
+    alertBeforeMinutes: [1440, 60, 30, 5],
   },
 ];
 
@@ -176,7 +219,7 @@ export function getUpcomingEvents(limit?: number): EconomicEvent[] {
   const upcoming = economicEvents
     .filter(event => new Date(event.datetime) > now)
     .sort((a, b) => new Date(a.datetime).getTime() - new Date(b.datetime).getTime());
-  
+
   return limit ? upcoming.slice(0, limit) : upcoming;
 }
 
@@ -185,7 +228,7 @@ export function getTodayEvents(): EconomicEvent[] {
   const now = new Date();
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const todayEnd = new Date(todayStart.getTime() + 24 * 60 * 60 * 1000);
-  
+
   return economicEvents.filter(event => {
     const eventDate = new Date(event.datetime);
     return eventDate >= todayStart && eventDate < todayEnd;
@@ -203,23 +246,48 @@ export function getTimeUntilEvent(datetime: string): {
   const now = new Date();
   const eventDate = new Date(datetime);
   const diff = eventDate.getTime() - now.getTime();
-  
+
   if (diff < 0) {
-    return { days: 0, hours: 0, minutes: 0, isPast: true, label: "Completed" };
+    return { days: 0, hours: 0, minutes: 0, isPast: true, label: "완료" };
   }
-  
+
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
   const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  
+
   let label = "";
   if (days > 0) {
     label = `D-${days}`;
   } else if (hours > 0) {
-    label = `${hours}h ${minutes}m`;
+    label = `${hours}시간 ${minutes}분`;
   } else {
-    label = `${minutes}m`;
+    label = `${minutes}분`;
   }
-  
+
   return { days, hours, minutes, isPast: false, label };
+}
+
+// Get events that need alerts (within their alert windows)
+export function getEventsNeedingAlert(): { event: EconomicEvent; minutesUntil: number }[] {
+  const now = new Date();
+  const results: { event: EconomicEvent; minutesUntil: number }[] = [];
+
+  for (const event of economicEvents) {
+    if (!event.alertBeforeMinutes) continue;
+    const eventDate = new Date(event.datetime);
+    const minutesUntil = (eventDate.getTime() - now.getTime()) / (1000 * 60);
+
+    if (minutesUntil <= 0) continue;
+
+    // Check if we're within any alert window
+    for (const alertMinutes of event.alertBeforeMinutes) {
+      // Trigger alert if we're within 1 minute of the alert time
+      if (Math.abs(minutesUntil - alertMinutes) < 1) {
+        results.push({ event, minutesUntil: Math.round(minutesUntil) });
+        break;
+      }
+    }
+  }
+
+  return results;
 }

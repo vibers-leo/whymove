@@ -33,7 +33,7 @@ export async function GET(request: Request) {
       return NextResponse.redirect(`${origin}${next}`)
     }
     
-    console.error("Auth callback error:", error.message);
+    console.error("Auth callback error:", error?.message ?? "Unknown error");
   }
 
   // return the user to a more friendly error state instead of 404

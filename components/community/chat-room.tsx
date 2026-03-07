@@ -55,6 +55,8 @@ export const ChatRoom = ({ className }: { className?: string }) => {
                 localStorage.setItem("whymove_nickname", data.nickname);
             } else if (error && error.code === 'PGRST116') { // Not found
                 setIsNicknameModalOpen(true);
+            } else if (error) {
+                console.error("Failed to load profile:", error.message);
             }
           });
     } else {
@@ -84,6 +86,8 @@ export const ChatRoom = ({ className }: { className?: string }) => {
             sentiment: m.sentiment
           }));
           setMessages(formatted);
+        } else if (error) {
+          console.error("Failed to fetch messages:", error.message);
         }
       });
 
@@ -143,7 +147,7 @@ export const ChatRoom = ({ className }: { className?: string }) => {
         setInput("");
     } catch (error) {
         console.error("Error sending message:", error);
-        alert("Message failed to send. Check console.");
+        // TODO: Replace with toast notification component when available
     }
   };
 
