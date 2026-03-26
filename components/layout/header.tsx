@@ -20,8 +20,8 @@ export function Header() {
     }
   };
 
-  const displayName = user?.user_metadata?.full_name || user?.user_metadata?.name || "Trader";
-  const photoURL = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
+  const displayName = user?.displayName || "Trader";
+  const photoURL = user?.photoURL;
 
   return (
     <>
@@ -48,7 +48,7 @@ export function Header() {
            {/* User Menu */}
            {user ? (
              <div className="relative group">
-                <button 
+                <button
                   className="flex items-center gap-2 pl-2 pr-1 py-1 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition-all"
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
@@ -77,7 +77,7 @@ export function Header() {
                     <button className="w-full text-left px-4 py-3 text-sm text-foreground/70 hover:bg-foreground/5 flex items-center gap-2 transition-colors">
                        <Settings size={14} /> Settings
                     </button>
-                    <button 
+                    <button
                       onClick={handleLogout}
                       className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-500/10 flex items-center gap-2 transition-colors border-t border-foreground/10"
                     >
@@ -86,7 +86,7 @@ export function Header() {
                 </div>
              </div>
            ) : (
-             <button 
+             <button
                onClick={() => setIsLoginModalOpen(true)}
                className="px-4 py-2 bg-foreground text-background text-sm font-bold rounded-full hover:bg-foreground/90 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.1)]"
              >

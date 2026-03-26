@@ -47,7 +47,7 @@ export const ChatRoom = ({ className }: { className?: string }) => {
         supabase
           .from('profiles')
           .select('nickname')
-          .eq('id', user.id)
+          .eq('id', user.uid)
           .single()
           .then(({ data, error }) => {
             if (data && !error) {
@@ -129,7 +129,7 @@ export const ChatRoom = ({ className }: { className?: string }) => {
     if (!input.trim()) return;
 
     try {
-        const photoURL = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
+        const photoURL = user?.photoURL;
         const { error } = await supabase
           .from('messages')
           .insert({
@@ -168,9 +168,9 @@ export const ChatRoom = ({ className }: { className?: string }) => {
         <div className="text-xs text-foreground/40 flex items-center gap-1 cursor-pointer hover:text-foreground/80" onClick={() => !user && setIsLoginModalOpen(true)}>
            {user ? (
              <div className="flex items-center gap-2" onClick={() => setIsNicknameModalOpen(true)} title="Change Nickname">
-                {user.user_metadata?.avatar_url || user.user_metadata?.picture ? (
+                {user.photoURL ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={user.user_metadata?.avatar_url || user.user_metadata?.picture} alt="user" className="w-4 h-4 rounded-full" />
+                    <img src={user.photoURL} alt="user" className="w-4 h-4 rounded-full" />
                 ) : (
                     <User size={12} />
                 )}

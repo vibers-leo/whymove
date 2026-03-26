@@ -33,10 +33,10 @@ export function NicknameModal({ isOpen, onComplete }: NicknameModalProps) {
       const { error: upsertError } = await supabase
         .from('profiles')
         .upsert({
-          id: user.id,
+          id: user.uid,
           nickname: nickname,
           email: user.email,
-          avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture,
+          avatar_url: user.photoURL,
           updated_at: new Date().toISOString(),
         });
 
@@ -51,7 +51,7 @@ export function NicknameModal({ isOpen, onComplete }: NicknameModalProps) {
 
       // Save to local storage as backup/cache
       localStorage.setItem("whymove_nickname", nickname);
-      
+
       onComplete(nickname);
     } catch (err) {
       console.error("Error saving nickname:", err);
@@ -71,7 +71,7 @@ export function NicknameModal({ isOpen, onComplete }: NicknameModalProps) {
             <div className="w-16 h-16 rounded-full bg-cyan-500/10 flex items-center justify-center mb-2">
                 <UserCheck size={32} className="text-cyan-500" />
             </div>
-            
+
             <h2 className="text-2xl font-bold text-foreground">Choose Identity</h2>
             <p className="text-foreground/60 text-sm">
                 How should we call you in the chat? <br/>
@@ -80,8 +80,8 @@ export function NicknameModal({ isOpen, onComplete }: NicknameModalProps) {
 
             <form onSubmit={handleSubmit} className="w-full mt-2 space-y-3">
                 <div className="relative">
-                    <input 
-                        type="text" 
+                    <input
+                        type="text"
                         value={nickname}
                         onChange={(e) => setNickname(e.target.value)}
                         placeholder="Ex: CryptoKing"
@@ -89,11 +89,11 @@ export function NicknameModal({ isOpen, onComplete }: NicknameModalProps) {
                         autoFocus
                     />
                 </div>
-                
+
                 {error && <p className="text-red-500 text-xs font-bold">{error}</p>}
 
-                <button 
-                    type="submit" 
+                <button
+                    type="submit"
                     disabled={loading || !nickname.trim()}
                     className="w-full bg-cyan-600 hover:bg-cyan-500 text-background font-bold py-3 rounded-lg transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 >

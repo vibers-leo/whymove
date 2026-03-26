@@ -1,8 +1,14 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { User, Session } from "@supabase/supabase-js";
-import { supabase } from "@/lib/supabase";
+import {
+  onAuthStateChanged,
+  signInWithPopup,
+  signOut as firebaseSignOut,
+  GoogleAuthProvider,
+  type User,
+} from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 interface AuthContextType {
   user: User | null;
@@ -25,38 +31,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 1. Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
       setLoading(false);
-    });
 
-    // 2. Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-      
-      if (session?.user) {
-        localStorage.setItem("whymove_uid", session.user.id);
+      if (firebaseUser) {
+        localStorage.setItem("whymove_uid", firebaseUser.uid);
       } else {
         localStorage.removeItem("whymove_uid");
       }
     });
 
     return () => {
-      subscription.unsubscribe();
+      unsubscribe();
     };
   }, []);
 
   const signInWithGoogle = async () => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      if (error) throw error;
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
     } catch (error) {
       console.error("Error signing in with Google", error);
       throw error;
@@ -65,8 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      await firebaseSignOut(auth);
     } catch (error) {
       console.error("Error signing out", error);
       throw error;
