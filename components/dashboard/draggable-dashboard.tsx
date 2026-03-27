@@ -20,15 +20,15 @@ export const DraggableDashboard = ({
     const newEvent: ChartEvent = {
       id: `${Date.now()}-${type}`,
       type: type as "trump" | "cpi" | "pump",
-      label: type === "trump" 
-        ? "🔥 Trump Tweet Detected!" 
-        : type === "cpi" 
-          ? "📊 CPI Data Released!" 
-          : "🚀 Musk Pump Alert!",
+      label: type === "trump"
+        ? "트럼프 트윗 감지"
+        : type === "cpi"
+          ? "CPI 데이터 발표"
+          : "머스크 펌프 알림",
       color: type === "trump" ? "orange" : type === "cpi" ? "red" : "cyan",
       timestamp: new Date(),
     };
-    
+
     setChartEvents(prev => [...prev, newEvent]);
     setTimeout(() => {
       setChartEvents(prev => prev.filter(e => e.id !== newEvent.id));
@@ -42,41 +42,41 @@ export const DraggableDashboard = ({
   }, []);
 
   return (
-    <div className="w-full h-full flex gap-3">
-      {/* LEFT COLUMN */}
-      <div className="flex-1 flex flex-col gap-3 min-w-0">
-        {/* Chart Widget - 70% */}
-        <div className="flex-[7] min-h-0 border border-foreground/10 rounded-xl bg-foreground/5 backdrop-blur-md overflow-hidden shadow-xl relative">
-          {/* Event Control Panel */}
+    <div className="w-full h-full flex gap-2.5">
+      {/* 좌측 컬럼 */}
+      <div className="flex-1 flex flex-col gap-2.5 min-w-0">
+        {/* 차트 위젯 — 70% */}
+        <div className="flex-[7] min-h-0 glass-card rounded-xl overflow-hidden relative">
+          {/* 이벤트 컨트롤 패널 */}
           <div className="absolute top-2 left-2 z-30">
             <VolatilityControlPanel onTrigger={handleEventTrigger} />
           </div>
 
-          {/* Chart Events Overlay */}
+          {/* 차트 이벤트 오버레이 */}
           <ChartEventOverlay events={chartEvents} onDismiss={dismissEvent} />
 
-          {/* Chart */}
+          {/* 차트 */}
           <div className="h-full w-full bg-background">
             <MainChart />
           </div>
         </div>
 
-        {/* Bottom Row - 30% */}
-        <div className="flex-[3] min-h-0 flex gap-3">
-          {/* Social Feed Widget - Real-time posts from influencers */}
-          <div className="flex-1 border border-foreground/10 rounded-xl bg-foreground/5 backdrop-blur-md overflow-hidden shadow-xl flex flex-col p-3">
+        {/* 하단 행 — 30% */}
+        <div className="flex-[3] min-h-0 flex gap-2.5">
+          {/* 소셜 피드 위젯 */}
+          <div className="flex-1 glass-card rounded-xl overflow-hidden flex flex-col p-3">
             <SocialFeed maxPosts={10} showHeader={true} />
           </div>
 
-          {/* Calendar Widget - Now with real data */}
-          <div className="flex-1 border border-foreground/10 rounded-xl bg-foreground/5 backdrop-blur-md overflow-hidden shadow-xl flex flex-col p-3">
+          {/* 캘린더 위젯 */}
+          <div className="flex-1 glass-card rounded-xl overflow-hidden flex flex-col p-3">
             <MarketCalendar useRealData={true} maxEvents={5} />
           </div>
         </div>
       </div>
 
-      {/* RIGHT COLUMN - Chat */}
-      <div className="w-[360px] xl:w-[400px] shrink-0 border border-foreground/10 rounded-xl bg-foreground/5 backdrop-blur-md overflow-hidden shadow-xl">
+      {/* 우측 컬럼 — 채팅 */}
+      <div className="w-[360px] xl:w-[400px] shrink-0 glass-card rounded-xl overflow-hidden">
         <ChatRoom className="h-full border-none rounded-none" />
       </div>
     </div>

@@ -16,7 +16,7 @@ export const LiveTicker = ({
     price: string;
     change: string;
     isUp: boolean;
-    tvSymbol: string; // TradingView symbol
+    tvSymbol: string;
   }[];
   direction?: "left" | "right";
   speed?: "fast" | "normal" | "slow";
@@ -37,15 +37,9 @@ export const LiveTicker = ({
     const getDirection = () => {
       if (containerRef.current) {
         if (direction === "left") {
-          containerRef.current.style.setProperty(
-            "--animation-direction",
-            "forwards"
-          );
+          containerRef.current.style.setProperty("--animation-direction", "forwards");
         } else {
-          containerRef.current.style.setProperty(
-            "--animation-direction",
-            "reverse"
-          );
+          containerRef.current.style.setProperty("--animation-direction", "reverse");
         }
       }
     };
@@ -72,43 +66,42 @@ export const LiveTicker = ({
     <div
       ref={containerRef}
       className={cn(
-        "scroller relative z-20 max-w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]",
+        "scroller relative z-20 max-w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]",
         className
       )}
     >
       <ul
         ref={scrollerRef}
         className={cn(
-          "flex min-w-full shrink-0 gap-16 py-4 w-max flex-nowrap", // Increased gap
+          "flex min-w-full shrink-0 gap-6 py-2 w-max flex-nowrap",
           start && "animate-scroll",
           pauseOnHover && "hover:[animation-play-state:paused]"
         )}
       >
-        {/* Render items twice to create seamless loop without losing event handlers on clones */}
         {[...items, ...items, ...items].map((item, idx) => (
           <li
             key={idx}
-            className="w-auto max-w-full relative rounded-2xl flex-shrink-0"
+            className="w-auto max-w-full relative flex-shrink-0"
           >
-             <button
-               onClick={() => onSymbolSelect?.(item.tvSymbol)}
-               className="px-6 py-2 flex items-center space-x-3 bg-foreground/5 border border-foreground/10 rounded-2xl hover:bg-foreground/10 transition-colors cursor-pointer"
-             >
-                <div className="flex flex-col items-start">
-                   <span className="font-bold text-foreground text-sm">{item.symbol}</span>
-                </div>
-                <div className="flex flex-col items-end">
-                   <span className="text-foreground/60 text-xs">{item.price}</span>
-                   <span
-                     className={cn(
-                       "text-xs font-bold",
-                       item.isUp ? "text-green-500" : "text-red-500"
-                     )}
-                   >
-                     {item.change}
-                   </span>
-                </div>
-             </button>
+            <button
+              onClick={() => onSymbolSelect?.(item.tvSymbol)}
+              className="flex items-center gap-3 px-3 py-1 rounded-md hover:bg-white/[0.04] transition-colors duration-200 cursor-pointer group"
+            >
+              <span className="font-bold text-foreground/80 text-xs tracking-wide group-hover:text-foreground transition-colors">
+                {item.symbol}
+              </span>
+              <span className="text-foreground/40 text-xs font-mono">
+                ${item.price}
+              </span>
+              <span
+                className={cn(
+                  "text-xs font-bold font-mono tabular-nums",
+                  item.isUp ? "text-emerald-400" : "text-red-400"
+                )}
+              >
+                {item.change}
+              </span>
+            </button>
           </li>
         ))}
       </ul>

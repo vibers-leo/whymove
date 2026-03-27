@@ -2,10 +2,11 @@
 
 import React, { useState } from "react";
 import { useAuth } from "@/components/auth/auth-provider";
-import { User, LogOut, Settings } from "lucide-react";
+import { User, LogOut, Settings, Activity } from "lucide-react";
 import { LoginModal } from "@/components/auth/login-modal";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { PushNotificationManager } from "@/components/notification/push-notification";
+import Link from "next/link";
 
 export function Header() {
   const { user, logout } = useAuth();
@@ -25,74 +26,82 @@ export function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 h-16 bg-background/50 backdrop-blur-md border-b border-foreground/10 z-50 flex items-center justify-between px-4 md:px-8">
-        {/* Logo */}
-        <div className="flex items-center gap-2">
-           <div className="w-8 h-8 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center font-bold text-white text-xl shadow-[0_0_15px_rgba(6,182,212,0.5)]">
-             W
-           </div>
-           <span className="font-bold text-lg tracking-tight text-foreground hidden md:block">
-             WhyMove
-           </span>
-        </div>
+      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center justify-between px-4 md:px-6">
+        {/* 글래스 배경 */}
+        <div className="absolute inset-0 bg-background/60 backdrop-blur-xl border-b border-white/[0.04]" />
 
-        {/* Right Actions */}
-        <div className="flex items-center gap-3">
-           {/* Theme Toggle */}
-           <ThemeToggle />
+        <div className="relative z-10 flex items-center justify-between w-full max-w-[1920px] mx-auto">
+          {/* 로고 */}
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="relative w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center font-bold text-zinc-950 text-sm transition-transform duration-300 group-hover:scale-105">
+              W
+              <div className="absolute inset-0 rounded-lg bg-emerald-400/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="font-bold text-base tracking-tight text-foreground hidden md:block">
+                WhyMove
+              </span>
+              <div className="hidden md:flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+                <Activity size={10} className="text-emerald-400" />
+                <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Live</span>
+              </div>
+            </div>
+          </Link>
 
-           {/* Push Notification Toggle */}
-           <PushNotificationManager />
+          {/* 우측 액션 */}
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <PushNotificationManager />
 
-
-           {/* User Menu */}
-           {user ? (
-             <div className="relative group">
+            {/* 유저 메뉴 */}
+            {user ? (
+              <div className="relative group">
                 <button
-                  className="flex items-center gap-2 pl-2 pr-1 py-1 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition-all"
+                  className="flex items-center gap-2 pl-3 pr-1.5 py-1 rounded-full border border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06] transition-all duration-300"
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
-                   <span className="text-sm font-medium text-neutral-200 hidden md:block ml-2">
-                     {displayName}
-                   </span>
-                   {photoURL ? (
-                     // eslint-disable-next-line @next/next/no-img-element
-                     <img src={photoURL} alt="Profile" className="w-8 h-8 rounded-full border border-white/20" />
-                   ) : (
-                     <div className="w-8 h-8 rounded-full bg-cyan-900/50 flex items-center justify-center text-cyan-400 border border-cyan-500/30">
-                        <User size={16} />
-                     </div>
-                   )}
+                  <span className="text-sm font-medium text-foreground/80 hidden md:block">
+                    {displayName}
+                  </span>
+                  {photoURL ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={photoURL} alt="프로필" className="w-7 h-7 rounded-full border border-white/10" />
+                  ) : (
+                    <div className="w-7 h-7 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
+                      <User size={14} />
+                    </div>
+                  )}
                 </button>
 
-                {/* Dropdown */}
-                <div className="absolute right-0 top-full mt-2 w-48 bg-background border border-foreground/10 rounded-xl shadow-xl overflow-hidden hidden group-hover:block hover:block animation-in fade-in slide-in-from-top-2 duration-200">
-                    <div className="px-4 py-3 border-b border-foreground/10">
-                       <p className="text-sm text-foreground font-bold truncate">{displayName}</p>
-                       <p className="text-xs text-foreground/50 truncate">{user.email}</p>
-                    </div>
-                    <button className="w-full text-left px-4 py-3 text-sm text-foreground/70 hover:bg-foreground/5 flex items-center gap-2 transition-colors">
-                       <User size={14} /> My Page
-                    </button>
-                    <button className="w-full text-left px-4 py-3 text-sm text-foreground/70 hover:bg-foreground/5 flex items-center gap-2 transition-colors">
-                       <Settings size={14} /> Settings
-                    </button>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-500/10 flex items-center gap-2 transition-colors border-t border-foreground/10"
-                    >
-                       <LogOut size={14} /> Sign Out
-                    </button>
+                {/* 드롭다운 */}
+                <div className="absolute right-0 top-full mt-2 w-48 glass-card rounded-xl overflow-hidden hidden group-hover:block hover:block">
+                  <div className="px-4 py-3 border-b border-white/[0.04]">
+                    <p className="text-sm text-foreground font-bold truncate">{displayName}</p>
+                    <p className="text-xs text-muted truncate">{user.email}</p>
+                  </div>
+                  <button className="w-full text-left px-4 py-2.5 text-sm text-foreground/70 hover:bg-white/[0.04] flex items-center gap-2 transition-colors">
+                    <User size={14} /> 마이페이지
+                  </button>
+                  <button className="w-full text-left px-4 py-2.5 text-sm text-foreground/70 hover:bg-white/[0.04] flex items-center gap-2 transition-colors">
+                    <Settings size={14} /> 설정
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 flex items-center gap-2 transition-colors border-t border-white/[0.04]"
+                  >
+                    <LogOut size={14} /> 로그아웃
+                  </button>
                 </div>
-             </div>
-           ) : (
-             <button
-               onClick={() => setIsLoginModalOpen(true)}
-               className="px-4 py-2 bg-foreground text-background text-sm font-bold rounded-full hover:bg-foreground/90 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-             >
-               Sign In
-             </button>
-           )}
+              </div>
+            ) : (
+              <button
+                onClick={() => setIsLoginModalOpen(true)}
+                className="px-4 py-2 bg-emerald-500 text-zinc-950 text-sm font-bold rounded-lg hover:bg-emerald-400 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+              >
+                로그인
+              </button>
+            )}
+          </div>
         </div>
       </header>
 
