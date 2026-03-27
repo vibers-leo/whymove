@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { Send, User, TrendingUp, TrendingDown, DollarSign } from "lucide-react";
-import { supabase } from "@/lib/supabase";
 import { NicknameModal } from "@/components/auth/nickname-modal";
 import { LoginModal } from "@/components/auth/login-modal";
 import { useAuth } from "@/components/auth/auth-provider";
@@ -36,87 +35,26 @@ export const ChatRoom = ({ className }: { className?: string }) => {
   const [isNicknameModalOpen, setIsNicknameModalOpen] = useState(false);
   const [userNickname, setUserNickname] = useState<string | null>(null);
 
-  // Check/Load user profile on login
+  // 로컬 캐시에서 닉네임 로드
   useEffect(() => {
     if (user) {
         const cached = localStorage.getItem("whymove_nickname");
         if (cached) {
             setUserNickname(cached);
+        } else {
+            setIsNicknameModalOpen(true);
         }
-
-        supabase
-          .from('profiles')
-          .select('nickname')
-          .eq('id', user.uid)
-          .single()
-          .then(({ data, error }) => {
-            if (data && !error) {
-                setUserNickname(data.nickname);
-                localStorage.setItem("whymove_nickname", data.nickname);
-            } else if (error && error.code === 'PGRST116') { // Not found
-                setIsNicknameModalOpen(true);
-            }
-          });
     } else {
         setUserNickname(null);
     }
   }, [user]);
-
-  // Subscribe to Supabase Realtime
-  useEffect(() => {
-    // 1. Fetch initial messages
-    supabase
-      .from('messages')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(50)
-      .then(({ data, error }) => {
-        if (data && !error) {
-          const formatted = data.reverse().map(m => ({
-            id: m.id,
-            type: m.type,
-            user: m.user_nickname,
-            photoURL: m.photo_url,
-            text: m.text,
-            timestamp: m.created_at,
-            amount: m.amount,
-            side: m.side,
-            sentiment: m.sentiment
-          }));
-          setMessages(formatted);
-        }
-      });
-
-    // 2. Subscribe to new messages
-    const channel = supabase
-      .channel('public:messages')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
-        const newMessage = {
-          id: payload.new.id,
-          type: payload.new.type,
-          user: payload.new.user_nickname,
-          photoURL: payload.new.photo_url,
-          text: payload.new.text,
-          timestamp: payload.new.created_at,
-          amount: payload.new.amount,
-          side: payload.new.side,
-          sentiment: payload.new.sentiment
-        };
-        setMessages((prev) => [...prev, newMessage]);
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
 
   // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSendMessage = async (e?: React.FormEvent) => {
+  const handleSendMessage = (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!user) {
         setIsLoginModalOpen(true);
@@ -128,23 +66,17 @@ export const ChatRoom = ({ className }: { className?: string }) => {
     }
     if (!input.trim()) return;
 
-    try {
-        const photoURL = user?.photoURL;
-        const { error } = await supabase
-          .from('messages')
-          .insert({
-            user_nickname: userNickname,
-            photo_url: photoURL,
-            text: input,
-            type: "chat",
-          });
-        
-        if (error) throw error;
-        setInput("");
-    } catch (error) {
-        console.error("Error sending message:", error);
-        alert("Message failed to send. Check console.");
-    }
+    // 로컬 상태에 메시지 추가 (Supabase 제거 후 대체)
+    const newMessage: ChatMessage = {
+        id: Date.now(),
+        type: "chat",
+        user: userNickname ?? undefined,
+        photoURL: user?.photoURL ?? undefined,
+        text: input,
+        timestamp: new Date().toISOString(),
+    };
+    setMessages((prev) => [...prev, newMessage]);
+    setInput("");
   };
 
   return (

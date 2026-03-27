@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useAuth } from "@/components/auth/auth-provider";
-import { supabase } from "@/lib/supabase";
 import { UserCheck } from "lucide-react";
 
 interface NicknameModalProps {
@@ -30,31 +29,11 @@ export function NicknameModal({ isOpen, onComplete }: NicknameModalProps) {
     setError("");
 
     try {
-      const { error: upsertError } = await supabase
-        .from('profiles')
-        .upsert({
-          id: user.uid,
-          nickname: nickname,
-          email: user.email,
-          avatar_url: user.photoURL,
-          updated_at: new Date().toISOString(),
-        });
-
-      if (upsertError) {
-        if (upsertError.code === '23505') {
-          setError("This nickname is already taken.");
-        } else {
-          throw upsertError;
-        }
-        return;
-      }
-
-      // Save to local storage as backup/cache
+      // 로컬 스토리지에 닉네임 저장 (Supabase 제거 후 대체)
       localStorage.setItem("whymove_nickname", nickname);
-
       onComplete(nickname);
     } catch (err) {
-      console.error("Error saving nickname:", err);
+      console.error("닉네임 저장 실패:", err);
       setError("Failed to save. Try again.");
     } finally {
       setLoading(false);

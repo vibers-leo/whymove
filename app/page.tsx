@@ -5,7 +5,6 @@ import { GridBackground } from "@/components/ui/grid-background";
 import { Spotlight } from "@/components/ui/spotlight";
 import { LiveTicker } from "@/components/ui/live-ticker";
 import { Header } from "@/components/layout/header";
-import { supabase } from "@/lib/supabase";
 import { DraggableDashboard } from "@/components/dashboard/draggable-dashboard";
 
 export default function Home() {
@@ -37,30 +36,8 @@ export default function Home() {
         break;
     }
 
-    try {
-      // Insert into chat
-      await supabase.from('messages').insert({
-        type: "alert",
-        user_nickname: "SYSTEM",
-        text: alertText,
-        side: side,
-      });
-
-      // Also insert into social_posts for the feed
-      await supabase.from('social_posts').insert({
-        platform: type === "trump" ? "truth_social" : "twitter",
-        author_handle: type === "trump" ? "realDonaldTrump" : "elonmusk",
-        author_name: type === "trump" ? "Donald Trump" : "Elon Musk",
-        content: alertText,
-        content_translated: alertText,
-        impact_level: "high",
-        sentiment: side === "bull" ? "bullish" : "bearish",
-        keywords: type === "trump" ? ["bitcoin", "trump"] : type === "cpi" ? ["cpi", "inflation"] : ["doge", "musk"],
-        author_verified: true,
-      });
-    } catch (err) {
-      console.error("Failed to trigger event:", err);
-    }
+    // TODO: 실시간 백엔드 연동 시 이벤트 전송 구현
+    console.log("[Trigger]", { type, alertText, side });
   };
 
   return (

@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { 
   Twitter, 
@@ -9,7 +8,6 @@ import {
   TrendingUp, 
   TrendingDown, 
   Minus,
-  AlertTriangle,
   Zap,
   RefreshCw
 } from "lucide-react";
@@ -50,70 +48,53 @@ export function SocialFeed({
   showHeader = true,
   className 
 }: SocialFeedProps) {
-  const [posts, setPosts] = useState<SocialPost[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // 정적 데모 데이터 (Supabase 제거 후 대체)
+  const staticPosts: SocialPost[] = [
+    {
+      id: "demo-1",
+      created_at: new Date(Date.now() - 120000).toISOString(),
+      platform: "twitter",
+      author_handle: "elonmusk",
+      author_name: "Elon Musk",
+      author_verified: true,
+      content: "DOGE to the moon! 🚀",
+      impact_level: "high",
+      sentiment: "bullish",
+      keywords: ["doge", "crypto"],
+    },
+    {
+      id: "demo-2",
+      created_at: new Date(Date.now() - 600000).toISOString(),
+      platform: "truth_social",
+      author_handle: "realDonaldTrump",
+      author_name: "Donald Trump",
+      author_verified: true,
+      content: "Bitcoin is the future of finance. America will lead!",
+      impact_level: "high",
+      sentiment: "bullish",
+      keywords: ["bitcoin", "trump"],
+    },
+    {
+      id: "demo-3",
+      created_at: new Date(Date.now() - 1800000).toISOString(),
+      platform: "twitter",
+      author_handle: "CoinDesk",
+      author_name: "CoinDesk",
+      author_verified: true,
+      content: "Breaking: SEC announces new crypto regulations framework.",
+      impact_level: "medium",
+      sentiment: "neutral",
+      keywords: ["sec", "regulation"],
+    },
+  ];
 
-  // Fetch posts
-  const fetchPosts = async () => {
-    try {
-      setIsLoading(true);
-      const { data, error } = await supabase
-        .from("social_posts")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(maxPosts);
+  const [posts] = useState<SocialPost[]>(staticPosts.slice(0, maxPosts));
+  const [isLoading] = useState(false);
 
-      if (error) throw error;
-      setPosts(data || []);
-    } catch (err) {
-      console.error("Failed to fetch social posts:", err);
-      setError("Failed to load feed");
-    } finally {
-      setIsLoading(false);
-    }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const fetchPosts = () => {
+    // TODO: 실시간 백엔드 연동 시 데이터 페칭 구현
   };
-
-  // Initial fetch
-  useEffect(() => {
-    fetchPosts();
-  }, [maxPosts]);
-
-  // Real-time subscription
-  useEffect(() => {
-    const channel = supabase
-      .channel("social-posts-realtime")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "social_posts" },
-        (payload) => {
-          const newPost = payload.new as SocialPost;
-          setPosts((prev) => [newPost, ...prev.slice(0, maxPosts - 1)]);
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [maxPosts]);
-
-  if (isLoading && posts.length === 0) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <RefreshCw className="w-5 h-5 text-foreground/30 animate-spin" />
-      </div>
-    );
-  }
-
-  if (error && posts.length === 0) {
-    return (
-      <div className="h-full flex flex-col items-center justify-center text-foreground/40 text-sm">
-        <AlertTriangle className="w-5 h-5 mb-2" />
-        <span>{error}</span>
-      </div>
-    );
-  }
 
   return (
     <div className={cn("h-full flex flex-col", className)}>
