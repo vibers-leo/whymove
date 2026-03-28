@@ -1,0 +1,15 @@
+# WhyMove (와이무브)
+> 암호화폐 시장 변동성의 원인을 실시간으로 파악하는 트레이더용 프리미엄 대시보드
+
+## 주요 기능
+- 실시간 암호화폐 티커 및 차트
+- 드래그 가능한 위젯 기반 대시보드
+- 변동성 원인 분석
+- 다크/라이트 테마 지원
+
+## 기술 스택
+- Next.js, Supabase, TradingView Lightweight Charts, react-grid-layout, Framer Motion
+
+## 관련 링크
+- 서비스: https://whymove.vercel.app
+- 계발자들: https://vibers.co.kr

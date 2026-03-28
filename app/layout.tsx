@@ -51,6 +51,26 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              "name": "WhyMove",
+              "url": "https://whymove.vercel.app",
+              "description": "암호화폐 시장 변동성의 원인을 실시간으로 파악하는 트레이더용 프리미엄 대시보드",
+              "applicationCategory": "FinanceApplication",
+              "operatingSystem": "Web",
+              "creator": {
+                "@type": "Organization",
+                "name": "계발자들 (Vibers)",
+                "url": "https://vibers.co.kr"
+              },
+              "inLanguage": "ko"
+            })
+          }}
+        />
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7704550771011130"
