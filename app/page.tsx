@@ -4,6 +4,7 @@ import React from "react";
 import { LiveTicker } from "@/components/ui/live-ticker";
 import { Header } from "@/components/layout/header";
 import { DraggableDashboard } from "@/components/dashboard/draggable-dashboard";
+import VibersBanner from "@/components/VibersBanner";
 
 export default function Home() {
   // 정적 티커 데이터
@@ -62,6 +63,11 @@ export default function Home() {
         {/* 메인 대시보드 */}
         <div className="flex-1 w-full max-w-[1920px] mx-auto p-3 overflow-hidden">
           <DraggableDashboard handleTrigger={handleTrigger} />
+        </div>
+
+        {/* Vibers 크로스 프로모션 */}
+        <div className="flex justify-center py-3 flex-none">
+          <VibersBanner size="leaderboard" currentProject="whymove" />
         </div>
       </div>
     </main>
