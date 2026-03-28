@@ -534,6 +534,10 @@ export default function AboutPage() {
             </div>
             <span className="font-bold text-sm">WhyMove</span>
           </div>
+          <div className="flex items-center gap-4 text-xs text-foreground/30">
+            <Link href="/privacy" className="hover:text-emerald-400 transition-colors">개인정보처리방침</Link>
+            <Link href="/terms" className="hover:text-emerald-400 transition-colors">이용약관</Link>
+          </div>
           <p className="text-xs text-foreground/30">
             2026 WhyMove. 선물 트레이더를 위한 변동성 알림 서비스.
           </p>
