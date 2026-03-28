@@ -69,6 +69,14 @@ export default function Home() {
         <div className="flex justify-center py-3 flex-none">
           <VibersBanner size="leaderboard" currentProject="whymove" />
         </div>
+
+        {/* 푸터 */}
+        <footer className="flex-none border-t border-white/[0.06] py-4 text-center text-xs text-muted-foreground">
+          <div className="flex justify-center gap-6">
+            <a href="/privacy" className="hover:text-foreground transition-colors">개인정보처리방침</a>
+            <a href="/terms" className="hover:text-foreground transition-colors">이용약관</a>
+          </div>
+        </footer>
       </div>
     </main>
   );

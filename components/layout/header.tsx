@@ -79,12 +79,12 @@ export function Header() {
                     <p className="text-sm text-foreground font-bold truncate">{displayName}</p>
                     <p className="text-xs text-muted truncate">{user.email}</p>
                   </div>
-                  <button className="w-full text-left px-4 py-2.5 text-sm text-foreground/70 hover:bg-white/[0.04] flex items-center gap-2 transition-colors">
+                  <Link href="/mypage" className="w-full text-left px-4 py-2.5 text-sm text-foreground/70 hover:bg-white/[0.04] flex items-center gap-2 transition-colors">
                     <User size={14} /> 마이페이지
-                  </button>
-                  <button className="w-full text-left px-4 py-2.5 text-sm text-foreground/70 hover:bg-white/[0.04] flex items-center gap-2 transition-colors">
+                  </Link>
+                  <Link href="/settings" className="w-full text-left px-4 py-2.5 text-sm text-foreground/70 hover:bg-white/[0.04] flex items-center gap-2 transition-colors">
                     <Settings size={14} /> 설정
-                  </button>
+                  </Link>
                   <button
                     onClick={handleLogout}
                     className="w-full text-left px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 flex items-center gap-2 transition-colors border-t border-white/[0.04]"
