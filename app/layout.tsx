@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "WhyMove | 변동성 알림 대시보드",
     description: "암호화폐 시장 변동성의 원인을 실시간으로 파악하세요. 트레이더를 위한 프리미엄 대시보드.",
-    url: "https://whymove.vercel.app",
+    url: "https://whymove.vibers.co.kr",
     siteName: "WhyMove",
     type: "website",
     locale: "ko_KR",
@@ -58,7 +58,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebApplication",
               "name": "WhyMove",
-              "url": "https://whymove.vercel.app",
+              "url": "https://whymove.vibers.co.kr",
               "description": "암호화폐 시장 변동성의 원인을 실시간으로 파악하는 트레이더용 프리미엄 대시보드",
               "applicationCategory": "FinanceApplication",
               "operatingSystem": "Web",

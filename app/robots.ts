@@ -7,5 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/", "/auth/"],
     },
+    sitemap: "https://whymove.vibers.co.kr/sitemap.xml",
   };
 }
