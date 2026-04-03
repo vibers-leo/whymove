@@ -1,6 +1,9 @@
 ## 전략 문서 (개발 전 반드시 숙지)
 - **전략 진단 리포트**: `data/STRATEGY_ANALYSIS.md`
 - **PM 공통 지침**: 맥미니 루트 `pm.md`
+- **gstack 빌더 철학**: 맥미니 루트 `gstack.md` — Boil the Lake, Search Before Building, 스프린트 프로세스
+- **개발 프로세스**: Think → Plan → Build → Review → Test → Ship → Reflect
+- **핵심 규칙**: 테스트 동시 작성, 새 패턴 도입 전 검색, 압축률 기반 추정
 
 ### 전략 핵심 요약
 - 차별화: 위젯 기반 개인화 레이아웃이 기존 앱 대비 유일한 경쟁력
@@ -110,3 +113,10 @@ const image = await generateAIImage('financial data visualization chart, dark th
 ## 상위 브랜드
 - 회사: 계발자들 (Vibers)
 - 도메인: vibers.co.kr
+
+
+## 세션로그 기록 (필수)
+- 모든 개발 대화의 주요 내용을 `session-logs/` 폴더에 기록할 것
+- 파일명: `YYYY-MM-DD_한글제목.md` / 내용: 한글
+- 세션 종료 시, 마일스톤 달성 시, **컨텍스트 압축 전**에 반드시 저장
+- 상세 포맷은 상위 CLAUDE.md 참조

@@ -1,27 +1,46 @@
 $ next build
-▲ Next.js 16.2.1 (Turbopack)
+▲ Next.js 16.2.2 (Turbopack)
 - Environments: .env.local
 
   Creating an optimized production build ...
-✓ Compiled successfully in 1477ms
+✓ Compiled successfully in 5.6s
   Running TypeScript ...
-  Finished TypeScript in 1148ms ...
+  Finished TypeScript in 6.7s ...
   Collecting page data using 9 workers ...
-  Generating static pages using 9 workers (0/8) ...
-  Generating static pages using 9 workers (2/8) 
-  Generating static pages using 9 workers (4/8) 
-  Generating static pages using 9 workers (6/8) 
-✓ Generating static pages using 9 workers (8/8) in 197ms
+  Generating static pages using 9 workers (0/10) ...
+Firebase Config가 누락되었습니다. .env.local 파일을 확인해주세요.
+Firebase 초기화 에러: Error [FirebaseError]: Firebase: Error (auth/invalid-api-key).
+    at aO (.next/server/chunks/ssr/_0oi1s5q._.js:1:25822)
+    at aP (.next/server/chunks/ssr/_0oi1s5q._.js:1:25871)
+    at J.instanceFactory (.next/server/chunks/ssr/_0oi1s5q._.js:1:72744)
+    at L.getOrInitializeService (.next/server/chunks/ssr/_0oi1s5q._.js:1:10242)
+    at L.initialize (.next/server/chunks/ssr/_0oi1s5q._.js:1:9644)
+    at <unknown> (.next/server/chunks/ssr/_0oi1s5q._.js:1:74500)
+    at <unknown> (.next/server/chunks/ssr/_0oi1s5q._.js:1:74529)
+    at module evaluation (.next/server/chunks/ssr/_0oi1s5q._.js:1:75612)
+    at instantiateModule (.next/server/chunks/ssr/[turbopack]_runtime.js:853:9)
+    at getOrInstantiateModuleFromParent (.next/server/chunks/ssr/[turbopack]_runtime.js:877:12) {
+  code: 'auth/invalid-api-key',
+  customData: { appName: '[DEFAULT]' }
+}
+  Generating static pages using 9 workers (2/10) 
+  Generating static pages using 9 workers (4/10) 
+  Generating static pages using 9 workers (7/10) 
+✓ Generating static pages using 9 workers (10/10) in 269ms
   Finalizing page optimization ...
 
 Route (app)
 ┌ ○ /
 ├ ○ /_not-found
 ├ ○ /about
-├ ƒ /auth/callback
+├ ƒ /api/vibers-admin
+├ ○ /privacy
 ├ ○ /robots.txt
-└ ○ /sitemap.xml
+├ ○ /sitemap.xml
+└ ○ /terms
 
+
+ƒ Proxy (Middleware)
 
 ○  (Static)   prerendered as static content
 ƒ  (Dynamic)  server-rendered on demand
