@@ -29,6 +29,13 @@ export async function POST(req: NextRequest) {
 
     const token = await signToken({ sub: String(user.id), email: user.email, name: user.name });
 
+    // 바이버스 생태계 연결 (fire-and-forget)
+    fetch(`${process.env.VIBERS_SITE_URL ?? 'https://vibers.co.kr'}/api/vibers/connect`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-vibers-secret': process.env.VIBERS_CONNECT_SECRET ?? '' },
+      body: JSON.stringify({ type: 'join', brandSlug: 'whymove', userEmail: user.email, userName: user.name }),
+    }).catch(() => {});
+
     const response = NextResponse.json({ user: { id: user.id, email: user.email, name: user.name } });
     response.cookies.set('wm_token', token, {
       httpOnly: true,
