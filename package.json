@@ -24,7 +24,6 @@
     "react-dom": "^19.2.4",
     "react-grid-layout": "^2.2.2",
     "tailwind-merge": "^3.4.0",
-    "@vibers/admin-kit": "*"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
