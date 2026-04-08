@@ -34,7 +34,7 @@ export default function PrivacyPage() {
             <div className="mt-4">
               <h3 className="text-lg font-bold text-white mb-2">1. 회원가입 및 관리</h3>
               <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>회원 가입의사 확인, 본인 식별·인증</li>
+                <li>회원 가입의사 확인해요, 본인 식별·인증</li>
                 <li>회원자격 유지·관리, 서비스 부정이용 방지</li>
               </ul>
             </div>
@@ -49,7 +49,7 @@ export default function PrivacyPage() {
             <div className="mt-4">
               <h3 className="text-lg font-bold text-white mb-2">3. 민원 처리</h3>
               <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>민원인의 신원 확인, 민원사항 확인</li>
+                <li>민원인의 신원 확인해요, 민원사항 확인해요</li>
                 <li>사실조사를 위한 연락·통지, 처리결과 통보</li>
               </ul>
             </div>
@@ -136,7 +136,7 @@ export default function PrivacyPage() {
             <ul className="list-decimal list-inside space-y-2 ml-4">
               <li>개인정보 열람 요구</li>
               <li>오류 등이 있을 경우 정정 요구</li>
-              <li>삭제 요구</li>
+              <li>없애기 요구</li>
               <li>처리정지 요구</li>
             </ul>
           </div>
@@ -148,7 +148,7 @@ export default function PrivacyPage() {
           <div className="space-y-3 text-base text-zinc-300 leading-relaxed">
             <p>회사는 개인정보 보유기간의 경과, 처리목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체없이 해당 개인정보를 파기합니다.</p>
             <ul className="list-disc list-inside space-y-1 ml-4 mt-4">
-              <li>전자적 파일 형태: 복구 및 재생되지 않도록 안전하게 삭제</li>
+              <li>전자적 파일 형태: 복구 및 재생되지 않도록 안전하게 없애기</li>
               <li>종이에 출력된 개인정보: 분쇄기로 분쇄하거나 소각</li>
             </ul>
           </div>

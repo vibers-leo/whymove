@@ -327,7 +327,7 @@ export default function AboutPage() {
                 급락 중...
               </div>
               <div className="absolute bottom-4 right-4 px-3 py-1.5 rounded-lg bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-bold animate-pulse-subtle">
-                원인 검색 중...
+                원인 찾기 중...
               </div>
             </div>
           </div>
@@ -423,7 +423,7 @@ export default function AboutPage() {
             <FeatureCard
               icon={BarChart3}
               title="경제 캘린더"
-              description="CPI, FOMC, 고용지표 등 변동성을 유발하는 경제 이벤트 일정을 미리 확인하세요."
+              description="CPI, FOMC, 고용지표 등 변동성을 유발하는 경제 이벤트 일정을 미리 확인해요해봐요."
               delay={200}
             />
             <FeatureCard

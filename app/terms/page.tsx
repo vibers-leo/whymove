@@ -60,7 +60,7 @@ export default function TermsPage() {
         <section className="mb-10">
           <h2 className="text-2xl font-bold text-white mb-4">제5조 (면책 조항)</h2>
           <div className="space-y-3 text-base text-zinc-300 leading-relaxed">
-            <p>① 회사가 제공하는 시세 정보 및 분석 자료는 참고용이며, 투자 조언이 아닙니다.</p>
+            <p>① 회사가 제공하는 시세 정보 및 살펴보기 자료는 참고용이며, 투자 조언이 아닙니다.</p>
             <p>② 이용자의 투자 결정에 따른 손실에 대해 회사는 책임을 지지 않습니다.</p>
             <p>③ 회사는 천재지변 또는 이에 준하는 불가항력으로 인하여 서비스를 제공할 수 없는 경우에는 책임이 면제됩니다.</p>
           </div>
