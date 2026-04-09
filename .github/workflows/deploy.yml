@@ -1,0 +1,33 @@
+name: Deploy to NCP
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t whymove-app:latest .
+
+      - name: Save and transfer image
+        run: |
+          docker save whymove-app:latest | gzip > whymove-app.tar.gz
+          scp -o StrictHostKeyChecking=no whymove-app.tar.gz ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }}:/root/projects/whymove/
+
+      - name: Deploy on NCP
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.NCP_HOST }}
+          username: ${{ secrets.NCP_USER }}
+          key: ${{ secrets.NCP_SSH_KEY }}
+          script: |
+            cd /root/projects/whymove
+            docker load < whymove-app.tar.gz
+            docker compose down
+            docker compose up -d
+            docker exec npm-app-1 nginx -s reload || true
+            rm whymove-app.tar.gz
