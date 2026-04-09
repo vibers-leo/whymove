@@ -10,13 +10,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.NCP_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.NCP_HOST }} >> ~/.ssh/known_hosts
+
       - name: Build Docker image
         run: docker build -t whymove-app:latest .
 
       - name: Save and transfer image
         run: |
           docker save whymove-app:latest | gzip > whymove-app.tar.gz
-          scp -o StrictHostKeyChecking=no whymove-app.tar.gz ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }}:/root/projects/whymove/
+          scp whymove-app.tar.gz ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }}:/root/projects/whymove/
 
       - name: Deploy on NCP
         uses: appleboy/ssh-action@v1
