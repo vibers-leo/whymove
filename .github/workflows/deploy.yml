@@ -23,7 +23,7 @@ jobs:
       - name: Save and transfer image
         run: |
           docker save whymove-app:latest | gzip > whymove-app.tar.gz
-          scp whymove-app.tar.gz ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }}:/root/projects/whymove/
+          scp whymove-app.tar.gz docker-compose.yml ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }}:/root/projects/whymove/
 
       - name: Deploy on NCP
         uses: appleboy/ssh-action@v1
